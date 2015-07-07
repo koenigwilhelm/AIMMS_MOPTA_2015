@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<PageManager>
+	<Page Name="All Data Pages" PageGUID="A641F7D1-C232-4A69-A5BB-926C72E774F5">
+		<Page Name="[Data Page] X" PageGUID="B9D3F208-E8ED-4793-A5B8-163232928DB0" />
+	</Page>
+	<Page Name="MOPTA2015" PageGUID="FE352C0D-AD85-4850-A267-677BCDCD48A2" />
+</PageManager>

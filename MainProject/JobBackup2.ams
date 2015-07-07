@@ -1,0 +1,741 @@
+## ams_version=1.0
+
+Model Main_JobSchedulingInteger {
+    Set Job {
+        Index: i, j, k, d;
+    }
+    Set Time {
+        Index: t, t1, t2;
+        Definition: DATA{1..36};
+    }
+    Parameter JobCost {
+        IndexDomain: i;
+    }
+    Parameter JobBenefit {
+        IndexDomain: i;
+    }
+    Parameter JobRelation {
+        IndexDomain: (i,j);
+    }
+    Parameter JobDuration {
+        IndexDomain: i;
+    }
+    Parameter JobMultiConN {
+        IndexDomain: i;
+    }
+    Parameter Gamma {
+        InitialData: 0.99;
+    }
+    Parameter JobN;
+    Variable X {
+        IndexDomain: (i,t);
+        Range: binary;
+    }
+    Variable TotalBenefit {
+        Range: free;
+        Definition: -sum(t|t in Time, Gamma^Ord(t)*sum(i|i in Job, JobCost(i)*X(i,t)))+sum(t in Time,Gamma^Ord(t)*sum(i|i in Job, JobBenefit(i)*X(i,t)*Gamma^JobDuration(i)));
+    }
+    Variable TotalBenefitBadLuck {
+        Range: free;
+        Definition: -sum(t|t in Time, Gamma^Ord(t)*sum(i|i in Job, JobCost(i)*X(i,t)))+sum(t in Time,Gamma^Ord(t)*sum(i|i in Job and BadLuckAssignment(i,'Failure')<>1 and BadLuckAssignment(i,'DelayandFailure')<>1, JobBenefit(i)*X(i,t)*Gamma^JobDuration(i)));
+    }
+    Constraint JobOnlyOne {
+        IndexDomain: i;
+        Definition: sum(t|t in Time,X(i,t))<=1;
+    }
+    Constraint JobEarlyStart {
+        IndexDomain: i;
+        Definition: sum(t|t in Time and Ord(t)>=37-JobDuration(i)+1,X(i,t))=0;
+    }
+    Constraint JobPriorSeqCon {
+        IndexDomain: (i,j,t);
+        Definition: {
+            if(JobRelation(j,i)=1) then
+                X(j,t)<=sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(i),X(i,t1))
+            endif
+        }
+    }
+    Constraint JobConflictCons {
+        IndexDomain: (i,j,t);
+        Definition: {
+            if JobRelation(i,j)=-1 then
+                sum(t1|t1 in Time and Ord(t1)>=Ord(t)-JobDuration(j)+1 and Ord(t1)<=Ord(t)+JobDuration(i)-1,X(j,t1))+X(i,t)<=1
+            endif
+        }
+    }
+    Constraint JobMultiPreq1 {
+        IndexDomain: (i,k,t);
+        Definition: {
+            if(JobMultiConN(i)>0 and Ord(k)<=JobMultiConN(i)) then
+                   X(i,t)<=sum(j|j in Job and JobRelation(i,j)=Ord(k)+1,sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(j), X(j,t1)))
+            endif
+        }
+    }
+    Constraint JobFailurePrior {
+        IndexDomain: (j,t);
+        Definition: {
+            if(JobRelation(j,CurrentJob)=1) then
+                X(j,t)=0
+            endif
+        }
+    }
+    Constraint JobFailureMultiPreq1 {
+        IndexDomain: (i,k,t);
+        Definition: {
+            if(JobMultiConN(i)>0 and Ord(k)<=JobMultiConN(i)) then
+                   X(i,t)<=sum(j|j in Job and JobRelation(i,j)=Ord(k)+1 and BadLuckAssignment(j,'Failure')<>1 and BadLuckAssignment(j,'DelayandFailure')<>1,sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(j), X(j,t1)))
+            endif
+        }
+    }
+    Constraint JobBadLuckFixPrevious {
+        IndexDomain: (i,t);
+        Definition: {
+            If(Ord(t)<CurrentTime or i=CurrentJob) then
+                X(i,t)=CurrentX(i,t)
+            endif
+        }
+    }
+    Constraint LimitedSelected {
+        IndexDomain: i;
+        Definition: {
+            sum(t,X(i,t))<=Sum(t,CurrentX(i,t));
+        }
+    }
+    Set OriginalScheduleConstraints {
+        SubsetOf: AllConstraints;
+    }
+    Set FailureScheduleConstraints {
+        SubsetOf: AllConstraints;
+    }
+    Set DelayScheduleConstraints {
+        SubsetOf: AllConstraints;
+    }
+    MathematicalProgram JobSchedulingInt {
+        Objective: TotalBenefit;
+        Direction: maximize;
+        Constraints: OriginalScheduleConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    MathematicalProgram JobFailureReSchedule {
+        Objective: TotalBenefitBadLuck;
+        Direction: maximize;
+        Constraints: FailureScheduleConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    MathematicalProgram JobDelayReSchedule {
+        Objective: TotalBenefitBadLuck;
+        Direction: maximize;
+        Constraints: DelayScheduleConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    Procedure MainInitialization {
+        Body: {
+            For(i in Job) do
+                OriginalJobDuration(i):=JobDuration(i);
+            endfor
+        }
+    }
+    Procedure MainExecution {
+        Body: {
+            solve JobSchedulingInt where time_limit:=30;
+        }
+    }
+    Procedure RecoveringSchedule {
+        Body: {
+            CurrentSelectedJob:=DATA{};
+            for (i in Job, t in Time) do
+               CurrentX(i,t):=X(i,t);
+               if(X(i,t)=1)then
+                  CurrentSelectedJob:=CurrentSelectedJob+i;
+                  CurrentSelectedJobTime(i):=Ord(t);
+               endif;
+            endfor;
+            
+            InitialNotSelectedProjects:=DATA{};
+            for(i in Job) do
+               if(sum(t|t in Time, X(i,t))=0) then
+                  InitialNotSelectedProjects:=InitialNotSelectedProjects+i;
+               endif;
+            endfor;
+        }
+    }
+    Procedure EvaluationUpdatedSchedule {
+        Body: {
+            !Intialization
+            for (i in Job) do
+                JobDuration(i):=OriginalJobDuration(i);
+            endfor;
+            
+            MainExecution;
+            CurrentBadLuckJob:=DATA{};
+            for (i in BadLuckJob) do
+                CurrentBadLuckJob:=CurrentBadLuckJob+i;
+            endfor;
+            While(card(CurrentBadLuckJob)>0) do
+                 RecoveringSchedule;
+                !Pick the one with the earliest starting time
+                CurrentJob:=argmin(i|i in CurrentBadLuckJob, CurrentSelectedJobTime(i)+JobDuration(i));
+                CurrentTime:=CurrentSelectedJobTime(CurrentJob)+JobDuration(CurrentJob);
+                If(BadLuckAssignment(CurrentJob,'Failure')=1) then
+                    !Constructed an optimization problem based upon the fact that Current Job has failed
+                    Solve JobFailureReSchedule;
+                endif;
+                If(BadLuckAssignment(CurrentJob,'Delay')=1)then
+                    JobDuration(CurrentJob):=JobDuration(CurrentJob)+DelayTime(CurrentJob);
+                    Solve JobDelayReSchedule;
+                endif;
+                CurrentBadLuckJob:=CurrentBadLuckJob-CurrentJob;
+            endwhile;
+        }
+    }
+    Procedure Test {
+        Body: {
+            Solve UpdateWorstCase;
+        }
+    }
+    DeclarationSection Declarations {
+        Parameter OriginalJobDuration {
+            IndexDomain: i;
+        }
+        Parameter flag;
+        ElementParameter CurrentJob {
+            Range: Job;
+        }
+        Set SelectedJob {
+            SubsetOf: Job;
+        }
+        Set CurrentSelectedJob {
+            SubsetOf: Job;
+        }
+        Set FinalBenefitJob {
+            SubsetOf: SelectedJob;
+        }
+        Set FinalIntermediateJob {
+            SubsetOf: SelectedJob;
+        }
+        Set TempJob1 {
+            SubsetOf: Job;
+        }
+        Set TempJob2 {
+            SubsetOf: Job;
+        }
+        Parameter SelectedJobTime {
+            IndexDomain: i|i in SelectedJob;
+        }
+        Parameter CurrentSelectedJobTime {
+            IndexDomain: i;
+        }
+        Parameter CurrentX {
+            IndexDomain: (i,t);
+        }
+        Parameter SelectedJobFinishTime {
+            IndexDomain: i;
+        }
+        Parameter BenefitIntermediateCorrespondence {
+            IndexDomain: (i,j);
+        }
+        Set BadLuckJob {
+            SubsetOf: Job;
+        }
+        Set CurrentBadLuckJob {
+            SubsetOf: Job;
+        }
+        Set BadLuckType {
+            Index: p;
+        }
+        Parameter BadluckProb {
+            IndexDomain: (i,p);
+        }
+        Parameter BadLuckEntrophy {
+            IndexDomain: (i,p);
+            Range: nonnegative;
+            Definition: {
+                if(p='Failure') then
+                     if(BadLuckProb(i,p)=0) then
+                         +Inf
+                     else
+                        -log(BadLuckProb(i,p))
+                     endif
+                elseif (p='Delay') then
+                     if(BadLuckProb(i,p)=0) then
+                        +Inf
+                     else
+                        -log(1-BadLuckProb(i,'Failure'))-log(BadLuckProb(i,p))
+                     endif
+                elseif (p='DelayandFailure') then
+                     if(BadLuckProb(i,p)=0 or BadLuckProb(i,'Delay')=0) then
+                        +Inf
+                     else
+                        -log(1-BadLuckProb(i,'Failure'))-log(BadLuckProb(i,'Delay'))-log(BadLuckProb(i,'DelayandFailure'))
+                     endif
+                endif
+            }
+        }
+        Parameter DelayTime {
+            IndexDomain: i;
+        }
+        Parameter BadLuckAssignment {
+            IndexDomain: (i,p)|i in SelectedJob;
+            Range: binary;
+        }
+        Parameter mark;
+        Set SuspectedInfluencedJob {
+            SubsetOf: SelectedJob;
+        }
+        Set FinalJobDone {
+            SubsetOf: SelectedJob;
+        }
+        Parameter FinalJobTime {
+            IndexDomain: i;
+        }
+        Parameter FinalJobFinishTime {
+            IndexDomain: i;
+        }
+    }
+    Procedure MainTermination {
+        Body: {
+            return DataManagementExit();
+        }
+    }
+    Procedure ResetBadLuck {
+        Body: {
+            BadLuckJob:=DATA{};
+            for (i in Job, p in BadLuckType) do
+                BadLuckAssignment(i,p):=0;
+            endfor;
+            
+            for (i in Job) do
+                JobDuration(i):=OriginalJobDuration(i);
+            endfor
+        }
+    }
+    Procedure ResetWorstScenario {
+        Body: {
+            WorstCaseScenarioProject:=DATA{};
+            for ( i in Job, p in BadLuckType) do
+                 WorstCaseScenario(i,p):=0;
+            endfor;
+            
+            for (i in Job, t in Time) do
+                 LastWorstSolution(i,t):=0;
+            endfor;
+            
+            CurrentScheduleTime:=0;
+        }
+    }
+    Procedure UpdateSchedule {
+        Body: {
+            !Given the Critical Project  and its type , would like to update the original Schedule
+        }
+    }
+    Procedure GreedyHeuristic {
+        Body: {
+            !Initialization
+            !ResetBadLuck;
+            ResetWorstScenario;
+            MainExecution;
+            RecoveringSchedule;
+            CurrentTotalBenefit:=TotalBenefit;
+            OriginalScheduleJob:=DATA{};
+            CurrentBudgetW:=BudgetW;
+            CurrentScheduleTime:=0;
+            for (i in CurrentSelectedJob) do
+               OriginalScheduleJob:=OriginalScheduleJob+i;
+            endfor;
+            flag:=0;
+            While(flag=0)do
+               flag:=1;
+               !Pick all possible combinations and compare the outcome, at current stage we only test with degree 1
+               For (i in OriginalScheduleJob, p in BadLuckType|ord(p)<=2 and BadLuckEntrophy(i,p)<=CurrentBudgetW and CurrentBudgetW>0) do
+                   !Assign the type of bad luck
+                   CurrentTime:=CurrentScheduleTime+JobDuration(i);
+                   WorstCaseScenario(i,p):=1;
+                   Solve UpdateWorstCase;
+                   Loss(i,p):=TotalBenefitWorstCase-CurrentTotalBenefit;
+                   WorstCaseScenario(i,p):=0;
+               endfor;
+               !Check the vector of loss and choose the worst one
+               if(card(OriginalScheduleJob)>0) then
+                     CriticalProject:=argmin(i|i in OriginalScheduleJob, min(p in BadLuckType, Loss(i,p)/BadLuckEntrophy(i,p)));
+                     CriticalProjectBadLuckType:=argmin(p|p in BadLuckType,Loss(CriticalProject,p)/BadLuckEntrophy(CriticalProject,p));
+                     if(Loss(CriticalProject,CriticalProjectBadLuckType)<0) then
+                         WorstCaseScenario(CriticalProject,CriticalProjectBadLuckType):=1;
+                         CurrentBudgetW:=CurrentBudgetW-BadLuckEntrophy(CriticalProject,CriticalProjectBadLuckType);
+                         CurrentScheduleTime:=CurrentScheduleTime+JobDuration(CriticalProject);
+                         Solve UpdateWorstCase;
+                         for (i in Job, t in Time) do
+                            LastWorstSolution(i,t):=X(i,t);
+                         endfor;
+                         !Remove projects that will not started in the OriginalScheduleJob
+                         for(i in Job) do
+                            If(sum(t|t in Time, LastWorstSolution(i,t))=0) then
+                               OriginalScheduleJob:=OriginalScheduleJob-i;
+                            endif;
+                         endfor;
+                         OriginalScheduleJob:=OriginalScheduleJob-CriticalProject;
+                         CurrentTotalBenefit:=TotalBenefitWorstCase;
+                         flag:=0;
+                     endif;
+               endif;
+               !ResetLoss
+               for (i in Job, p in BadLuckType) do
+                   Loss(i,p):=0;
+               endfor;
+               Tdd:=flag;
+            endwhile;
+        }
+    }
+    DeclarationSection GreedyDeclarations {
+        Set InitialNotSelectedProjects {
+            SubsetOf: Job;
+        }
+        Parameter CurrentTime;
+        Parameter BudgetW;
+        Parameter CurrentBudgetW;
+        Parameter CurrentTotalBenefit;
+        Parameter Loss {
+            IndexDomain: (i,p);
+        }
+        Parameter WorstCaseScenario {
+            IndexDomain: (i,p);
+        }
+        Parameter CurrentKnowWorstCase {
+            IndexDomain: (i,p);
+        }
+        Parameter CurrentScheduleTime;
+        Parameter LastWorstSolution {
+            IndexDomain: (i,t);
+        }
+        Parameter DelayLoss {
+            IndexDomain: t;
+        }
+        Parameter Tdd;
+        Parameter Tdd1;
+        Parameter Tdd2;
+        Variable TotalBenefitWorstCase {
+            Range: free;
+            Definition: -sum(t|t in Time, Gamma^Ord(t)*sum(i|i in Job, JobCost(i)*X(i,t)))+sum(t in Time,Gamma^Ord(t)*sum(i|i in Job and WorstCaseScenario(i,'Failure')<>1 and WorstCaseScenario(i,'DelayandFailure')<>1, JobBenefit(i)*X(i,t)*Gamma^(JobDuration(i)+DelayTime(i)*WorstCaseScenario(i,'Delay'))));
+        }
+        Constraint WorstPriorConstraint {
+            IndexDomain: (i,j,t);
+            Definition: {
+                if(JobRelation(j,i)=1 and CurrentKnowWorstCase(i,'Failure')<>1) then
+                    X(j,t)<=sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(i)-DelayTime(i)*WorstCaseScenario(i,'Delay'),X(i,t1))
+                elseif (JobRelation(j,i)=1 and CurrentKnowWorstCase(i,'Failure')=1) then
+                    X(j,t)<=0
+                endif
+            }
+        }
+        Constraint WorstCaseMultiPre1 {
+            IndexDomain: (i,k,t);
+            Definition: {
+                if(JobMultiConN(i)>0 and Ord(k)<=JobMultiConN(i)) then
+                       X(i,t)<=sum(j|j in Job and JobRelation(i,j)=Ord(k)+1 and CurrentKnowWorstCase(j,'Failure')<>1 and CurrentKnowWorstCase(j,'DelayandFailure')<>1,sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(j)-CurrentKnowWorstCase(j,'Delay')*DelayTime(j), X(j,t1)))
+                endif
+            }
+        }
+        Constraint WorstCaseConflict {
+            IndexDomain: (i,j,t);
+            Definition: {
+                if JobRelation(i,j)=-1 then
+                    sum(t1|t1 in Time and Ord(t1)>=Ord(t)-JobDuration(j)-(CurrentKnowWorstCase(j,'Delay')+CurrentKnowWorstCase(j,'DelayandFailure'))*DelayTime(j)+1 and Ord(t1)<=Ord(t)+JobDuration(i)+(CurrentKnowWorstCase(i,'Delay')+CurrentKnowWorstCase(i,'DelayandFailure'))*DelayTime(i)-1,X(j,t1))+X(i,t)<=1
+                endif
+            }
+        }
+        Constraint WorstCaseFixCurrent {
+            IndexDomain: (i,t);
+            Definition: {
+                if (Ord(t)<CurrentTime) then
+                    X(i,t)=LastWorstSolution(i,t)
+                endif
+            }
+        }
+        Constraint WorstCaseLimitedSelection {
+            IndexDomain: (i,t);
+            Definition: {
+                If (i in InitialNotSelectedProjects) then
+                   X(i,t)=0
+                endif
+            }
+        }
+        Set WorstCaseConstraints {
+            SubsetOf: AllConstraints;
+        }
+        MathematicalProgram UpdateWorstCase {
+            Objective: TotalBenefitWorstCase;
+            Direction: maximize;
+            Constraints: WorstCaseConstraints;
+            Variables: AllVariables;
+            Type: Automatic;
+        }
+        ElementParameter CriticalProject {
+            Range: Job;
+        }
+        ElementParameter CriticalProjectBadLuckType {
+            Range: BadLuckType;
+        }
+        Set OriginalScheduleJob {
+            SubsetOf: Job;
+        }
+        Parameter AlreadyDelayed {
+            IndexDomain: i;
+        }
+    }
+    Procedure NaiveDelayLossEstimate {
+        Body: {
+            !Here we give a very naive estimation of the delay. Assume that if one project is delayed, then all other projects whose starting time is later than the current project will be delayed.
+            !Estimate the loss of a function
+            ! The Estimation is totally based upon
+            !flag:=card(Time);
+            for (t in Time) do
+              DelayLoss(t):=0;
+            endfor;
+        }
+    }
+    Procedure NaiveFailureLossEstimate {
+        Body: {
+            ! The purpose of this procedure is to give an naive estimation on the loss of failure
+            ! This is part of a greedy heurstic to get the worst case scenario
+            
+            While (card(CurrentSelectedJob)>0) do
+               CurrentJob:=argmax(i|i in CurrentSelectedJob, CurrentSelectedJobTime(i));
+               !The CurrentJob will not yield any benefit if it fails
+               Loss(CurrentJob,'Failure'):=-Gamma^(CurrentSelectedJobTime(CurrentJob)+JobDuration(CurrentJob))*JobBenefit(CurrentJob);
+               !Estimate the cost of failure by adding up the Loss of projects that rely on current project
+               for(j in AlreadySelectedJob|OriginalJobRelation(j,CurrentJob)=1) do
+                   Loss(CurrentJob,'Failure'):=Loss(CurrentJob,'Failure')-Gamma^CurrentSelectedJobTime(j)*JobCost(j)+Loss(j,'Failure');
+               endfor;
+               !Estimate the cost of failure by addin up the loss of projects that rely on I which consists of current project
+               for(j in AlreadySelectedJob|OriginalJobRelation(j,CurrentJob)>1) do
+                   Loss(CurrentJob,'Failure'):=Loss(CurrentJob,'Failure')+(Loss(j,'Failure')-Gamma^CurrentSelectedJobTime(j)*JobCost(j))/(Count(k|k in CurrentSelectedJob and OriginalJobRelation(j,CurrentJob)=OriginalJobRelation(j,k)));
+               endfor;
+               CurrentSelectedJob:=CurrentSelectedJob-CurrentJob;
+               AlreadySelectedJob:=AlreadySelectedJob+CurrentJob;
+            endwhile;
+        }
+    }
+    Procedure NaiveLossEstimateIntialization {
+        Body: {
+            !Solve JobSchedulingint;
+            CurrentSelectedJob:=DATA{};
+            AlreadySelectedjob:=DATA{};
+            For (i in Job, t in Time) do
+                if(X(i,t)=1) then
+                    CurrentSelectedJob:=CurrentSelectedJob+i;
+                endif;
+            endfor;
+        }
+    }
+    Procedure UpdateWorstScenario {
+        Body: {
+            BadLuckJob:=DATA{};
+            for(i in Job, p in BadLuckType) do
+                if(WorstCaseScenario(i,p)=1) then
+                   BadLuckJob:=BadLuckJob+i;
+                endif;
+            endfor;
+            !MainExecution;
+            for(i in Job, t in Time) do
+                LastWorstSolution(i,t):=X(i,t);
+            endfor;
+            
+            for(i in Job, p in BadLuckType) do
+                CurrentKnowWorstCase(i,p):=0;
+            endfor;
+            
+            while(card(BadLuckJob)>0) do
+                !Pick the one with the earliest time of bad luck
+                CurrentJob:=argmin(i|i in BadLuckJob,CurrentSelectedJobTime(i)+JobDuration(i)+AlreadyDelayed(i)*DelayTime(i));
+                CurrentTime:=CurrentSelectedJobTime(CurrentJob)+JobDuration(CurrentJob)+AlreadyDelayed(CurrentJob)*DelayTime(CurrentJob);
+                for(p in BadLuckType) do
+                    if(WorstCaseScenario(CurrentJob,p)=1 and (p='Failure' or p='Delay')) then
+                       CurrentKnowWorstCase(CurrentJob,p):=1;
+                    elseif(WorstCaseScenario(CurrentJob,p)=1 and p='DelayandFailure' and AlreadyDelayed(CurrentJob)=0) then
+                       CurrentKnowWorstCase(CurrentJob,'Delay'):=1;
+                       AlreadyDelayed(CurrentJob):=1;
+                    elseif(WorstCaseScenario(CurrentJob,p)=1 and p='DelayandFailure' and AlreadyDelayed(CurrentJob)=1) then
+                       CurrentKnowWorstCase(CurrentJob,'Failure'):=1;
+                    endif;
+                endfor;
+                for(j in Job) do
+                   JobRelation(j,CurrentJob):=OriginalJobRelation(j,CurrentJob);
+                endfor;
+                Solve UpdateWorstCase where time_limit:=30;
+                !Update the LastWorstSolution, CurrentSelectedJob and CurrentSelectedJobTime
+                CurrentSelectedJob:=DATA{};
+                for(i in Job, t in Time) do
+                     LastWorstSolution(i,t):=X(i,t);
+                     if(X(i,t)=1) then
+                          CurrentSelectedJob:=CurrentSelectedJob+i;
+                          CurrentSelectedJobTime(i):=Ord(t);
+                     endif;
+                endfor;
+                if(WorstCaseScenario(CurrentJob,'DelayandFailure')<>1 or CurrentKnowWorstCase(CurrentJob,'Failure')=1) then
+                    BadLuckJob:=BadLuckJob-CurrentJob;
+                endif
+            endwhile;
+        }
+    }
+    Procedure NaiveGreedy {
+        Body: {
+            !Almost the same as the previous Heuristics Approach
+            !Initialize
+            ResetWorstScenario;
+            MainExecution;
+            OriginalScheduleJob:=DATA{};
+            InitialScheduleJob:=DATA{};
+            for(i in Job, t in Time) do
+               if(X(i,t)=1) then
+                   OriginalScheduleJob:=OriginalScheduleJob+i;
+                   InitialScheduleJob:=InitialScheduleJob+i;
+               endif;
+               LastWorstSolution(i,t):=X(i,t);
+            endfor;
+            InitialNotSelectedProjects:=DATA{};
+            for(i in Job) do
+                if(sum(t|t in Time, X(i,t))=0) then
+                    InitialNotSelectedProjects:=InitialNotSelectedProjects+i;
+                endif;
+            endfor;
+            flag:=0;
+            CurrentBudgetW:=BudgetW;
+            CurrentTime:=0;
+            
+            While(flag=0) do
+               flag:=1;
+               Tdd1:=Tdd1+1;
+               !Estimate the loss for a single failure
+               NaiveLossEstimateIntialization;
+               NaiveFailureLossEstimate;
+               NaiveLossEstimateIntialization;
+               NaiveDelayLossEstimate;
+               if(card(OriginalScheduleJob)>0) then
+                     CriticalProject:=argmin(i|i in OriginalScheduleJob, min(p|p in BadLuckType and BadLuckEntrophy(i,p)<=CurrentBudgetW, Loss(i,p)/BadLuckEntrophy(i,p)));
+                     CriticalProjectBadLuckType:=argmin(p|p in BadLuckType and BadLuckEntrophy(CriticalProject,p)<=CurrentBudgetW,Loss(CriticalProject,p)/BadLuckEntrophy(CriticalProject,p));
+                     !(CriticalProject, CriticalProjectBadLuckType):=argmin((i,p)|i in OriginalScheduleJob and p in BadLuckType, Loss(i,p)/BadLuckEntrophy(i,p));
+                     if(Loss(CriticalProject,CriticalProjectBadLuckType)<0) then
+                         WorstCaseScenario(CriticalProject,CriticalProjectBadLuckType):=1;
+                         CurrentBudgetW:=CurrentBudgetW-BadLuckEntrophy(CriticalProject,CriticalProjectBadLuckType);
+                         !CurrentScheduleTime:=CurrentScheduleTime+JobDuration(CriticalProject);
+                         UpdateWorstScenario;
+                         for (i in Job, t in Time) do
+                            LastWorstSolution(i,t):=X(i,t);
+                         endfor;
+                         !Remove projects that will not started in the OriginalScheduleJob
+                         for(i in Job) do
+                            If(sum(t|t in Time, LastWorstSolution(i,t))=0) then
+                               OriginalScheduleJob:=OriginalScheduleJob-i;
+                            endif;
+                         endfor;
+                         OriginalScheduleJob:=OriginalScheduleJob-CriticalProject;
+                         CurrentTotalBenefit:=TotalBenefitWorstCase;
+                         flag:=0;
+                         WorstCaseScenarioProject:=WorstCaseScenarioProject+CriticalProject;
+                         !Tdd:=Tdd+1;
+                     endif;
+                     !Tdd2:=Tdd2+1;
+               endif;
+               for (i in Job, p in BadLuckType) do
+                   Loss(i,p):=0;
+               endfor;
+            endwhile
+        }
+    }
+    Parameter UpdatedJobRelation {
+        IndexDomain: (i,j);
+    }
+    Parameter OriginalJobRelation {
+        IndexDomain: (i,j);
+    }
+    Set InitialScheduleJob {
+        SubsetOf: Job;
+    }
+    Set WorstCaseScenarioProject {
+        SubsetOf: Job;
+    }
+    Set OriginalSelectedJob {
+        SubsetOf: Job;
+    }
+    Set AlreadySelectedJob {
+        SubsetOf: Job;
+    }
+    Parameter PreviousWorstCaseBenefit;
+    Parameter TestJobRelation {
+        IndexDomain: (i,j);
+    }
+    Procedure Robustification {
+        Body: {
+            !This part is for robustification of the large problem
+            !We only consider the case of failure
+            !For the case of failure, in this example ,we only take a conservative approach ,in which the
+            !The robustification considers the part
+            for (i in WorstCaseScenarioProject) do
+                if(WorstCaseScenario(i,'Failure')=1) then
+                     ! Check all the project j that I \succ j and i\in I.i
+                     for(j|j in InitialScheduleJob and OriginalJobRelation(j,i)>1) do
+                          !Check if j still works
+                          OriginalSelectedJob:=OriginalSelectedJob+j;
+                          if(sum(t|t in Time, X(j,t))=0) then
+                               !Check if can add another job that is in the set i
+                               for(k|k in InitialNotSelectedProjects and JobRelation(j,k)=OriginalJobRelation(j,i)) do
+                                   !Check and see if k can be inserted into the schedule
+                                   UpdatedJobRelation(j,k):=1;
+                                   break;
+                               endfor;
+                          endif;
+                     endfor;
+                endif;
+                !if
+            endfor;
+        }
+    }
+    Procedure Robustification2 {
+        Body: {
+            for(i in Job, j in Job) do
+                !OriginalJobRelation(i,j):=JobRelation(i,j);
+                UpdatedJobRelation(i,j):=0;
+            endfor;
+            
+            for(i in Job, j in Job) do
+                TestJobRelation(i,j):=JobRelation(i,j);
+                JobRelation(i,j):=OriginalJobRelation(i,j);
+            endfor;
+            
+            !
+            
+            PreviousWorstCaseBenefit:=-1;
+            TotalBenefitWorstCase:=0;
+            While(TotalBenefitWorstCase>PreviousWorstCaseBenefit) do
+            PreviousWorstCaseBenefit:=TotalBenefitWorstCase;
+            
+            
+            NaiveGreedy;
+            Robustification;
+            for(i in Job, j in Job) do
+                if(UpdatedJobRelation(i,j)=1) then
+                    JobRelation(i,j):=1;
+                endif;
+            endfor;
+            
+            endwhile;
+            !
+            for(i in Job, j in Job) do
+                TestJobRelation(i,j):=JobRelation(i,j);
+                JobRelation(i,j):=OriginalJobRelation(i,j);
+            endfor;
+            !
+        }
+    }
+    Procedure RobustTest {
+        Body: {
+            for(i in Job, j in Job) do
+                if(UpdatedJobRelation(i,j)=1) then
+                    JobRelation(i,j):=1;
+                endif;
+            endfor;
+        }
+    }
+}

@@ -1,0 +1,400 @@
+## ams_version=1.0
+
+Model Main_JobSchedulingInteger {
+    Set Job {
+        Index: i, j, k, d;
+        Definition: {
+            DATA{Acquisition1a,
+            Acquisition1b,
+            Acquisition2a,
+            Acquisition2b,
+            Acquisition3a,
+            Acquisition3b,
+            Acquisition4a,
+            Acquisition4b,
+            Acquisition5a,
+            Acquisition5b,
+            Acquisition6a,
+            Acquisition6b,
+            Mkt1,
+            Mkt2,
+            Mkt3,
+            Mkt4,
+            Mkt5,
+            Mystery1,
+            Mystery2,
+            Mystery3,
+            ProdDev01a,
+            ProdDev01b,
+            ProdDev02a,
+            ProdDev02b,
+            ProdDev03a,
+            ProdDev03b,
+            ProdDev04a,
+            ProdDev04b,
+            Prod0Dev05,
+            ProdDev06,
+            ProdDev07,
+            ProdDev08a,
+            ProdDev08b,
+            ProdDev09,
+            ProdDev10,
+            ProdDev11a,
+            ProdDev11b,
+            ProdDev12a,
+            ProdDev12b,
+            ProdDev13a,
+            ProdDev13b,
+            ProdDev14,
+            ProdDev15a,
+            ProdDev15b,
+            ProdDev15c,
+            ProdDev16a,
+            ProdDev16b,
+            ProdDev16c,
+            ProdDev17a,
+            ProdDev17b,
+            ProdDev17c,
+            ProdDev18a,
+            ProdDev18b,
+            ProdDev19a,
+            ProdDev19b,
+            ProdDev19c,
+            ProdDev20,
+            ProdDev21,
+            ProdDev22,
+            RDEng01,
+            RDEng02,
+            RDEng03,
+            RDEng04,
+            RDMaterial1,
+            RDMaterial2,
+            RDMaterial3,
+            RDMaterial4,
+            RDMethods1,
+            RDMethods2,
+            RDNano1,
+            RDNano2,
+            RDNano3,
+            RDSystems1,
+            RDSystems2,
+            RDSystems3,
+            RDSystems4}
+        }
+    }
+    Set Time {
+        Index: t, t1, t2;
+        Definition: DATA{1..36};
+    }
+    Set PrioritySet {
+        Index: g;
+        Definition: {
+            DATA{
+            Project,
+            Precedence
+            }
+        }
+    }
+    Set AnyPrecedenceSet {
+        Index: h;
+        Definition: {
+            DATA{j,
+            I1,
+            I2,
+            I3,
+            I4}
+        }
+    }
+    Set Acquisitiona {
+        SubsetOf: Job;
+    }
+    Set Acquisitionb {
+        SubsetOf: Job;
+    }
+    Set MysteryMkt {
+        SubsetOf: Job;
+    }
+    Set ProDev {
+        SubsetOf: Job;
+    }
+    Set ProDeva {
+        SubsetOf: Job;
+    }
+    Set ProDevb {
+        SubsetOf: Job;
+    }
+    Set ProDevc {
+        SubsetOf: Job;
+    }
+    Set RDEng {
+        SubsetOf: Job;
+    }
+    Set RDMaterial {
+        SubsetOf: Job;
+    }
+    Set RDMethods {
+        SubsetOf: Job;
+    }
+    Set RDNano {
+        SubsetOf: Job;
+    }
+    Set RDSystems {
+        SubsetOf: Job;
+    }
+    Parameter JobCost {
+        IndexDomain: i;
+    }
+    Parameter JobBenefit {
+        IndexDomain: i;
+    }
+    Parameter JobRelation {
+        IndexDomain: (i,j);
+    }
+    Parameter JobDuration {
+        IndexDomain: i;
+    }
+    Parameter JobMultiConN {
+        IndexDomain: i;
+    }
+    Parameter Gamma {
+        InitialData: 0.99;
+    }
+    Parameter JobN;
+    Variable X {
+        IndexDomain: (i,t);
+        Range: binary;
+    }
+    Variable TotalBenefit {
+        Range: free;
+        Definition: -sum(t|t in Time, Gamma^Ord(t)*sum(i|i in Job, JobCost(i)*X(i,t)))+sum(t in Time,Gamma^Ord(t)*sum(i|i in Job, JobBenefit(i)*X(i,t)*Gamma^JobDuration(i)));
+    }
+    Constraint JobOnlyOne {
+        IndexDomain: i;
+        Definition: sum(t|t in Time,X(i,t))<=1;
+    }
+    Constraint JobEarlyStart {
+        IndexDomain: i;
+        Definition: sum(t|t in Time and Ord(t)>=37-JobDuration(i)+1,X(i,t))=0;
+    }
+    Constraint JobPriorSeqCon {
+        IndexDomain: (i,j,t);
+        Definition: {
+            if(JobRelation(j,i)=1) then
+                X(j,t)<=sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(i),X(i,t1))
+            endif
+        }
+    }
+    Constraint JobConflictCons {
+        IndexDomain: (i,j,t);
+        Definition: {
+            if JobRelation(i,j)=-1 then
+                sum(t1|t1 in Time and Ord(t1)>=Ord(t)-JobDuration(j)+1 and Ord(t1)<=Ord(t)+JobDuration(i)-1,X(j,t1))+X(i,t)<=1
+            endif
+        }
+    }
+    Constraint JobMultiPreq1 {
+        IndexDomain: (i,k,t);
+        Definition: {
+            if(JobMultiConN(i)>0 and Ord(k)<=JobMultiConN(i)) then
+                   X(i,t)<=sum(j|j in Job and JobRelation(i,j)=Ord(k)+1,sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(j), X(j,t1)))
+            endif
+        }
+    }
+    Constraint JobFailurePrior {
+        IndexDomain: (j,t);
+        Definition: {
+            if(JobRelation(j,CurrentJob)=1) then
+                X(j,t)=0
+            endif
+        }
+    }
+    Constraint JobFailureMultiPreq1 {
+        IndexDomain: (i,k,t);
+        Definition: {
+            if(JobMultiConN(i)>0 and Ord(k)<=JobMultiConN(i) and Ord(t)>=CurrentTime) then
+                   X(i,t)<=sum(j|j in Job and JobRelation(i,j)=Ord(k)+1 and j<>CurrentJob,sum(t1|t1 in Time and Ord(t1)<=Ord(t)-JobDuration(j), X(j,t1)))
+            endif
+        }
+    }
+    Constraint JobBadLuckFixPrevious {
+        IndexDomain: (i,t);
+        Definition: {
+            If(Ord(t)<CurrentTime or i=CurrentJob) then
+                X(i,t)=CurrentX(i,t)
+            endif
+        }
+    }
+    Constraint LimitedSelected {
+        IndexDomain: i;
+        Definition: {
+            sum(t,X(i,t))<=Sum(t,CurrentX(i,t));
+        }
+    }
+    Set OriginalScheduleConstraints {
+        SubsetOf: AllConstraints;
+    }
+    Set FailureScheduleConstraints {
+        SubsetOf: AllConstraints;
+    }
+    Set DelayScheduleConstraints {
+        SubsetOf: AllConstraints;
+    }
+    MathematicalProgram JobSchedulingInt {
+        Objective: TotalBenefit;
+        Direction: maximize;
+        Constraints: OriginalScheduleConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    MathematicalProgram JobFailureReSchedule {
+        Objective: TotalBenefit;
+        Direction: maximize;
+        Constraints: FailureScheduleConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    MathematicalProgram JobDelayReSchedule {
+        Objective: TotalBenefit;
+        Direction: maximize;
+        Constraints: DelayScheduleConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    Procedure MainInitialization {
+        Body: {
+            For(i in Job) do
+                OriginalJobDuration(i):=JobDuration(i);
+            endfor
+        }
+    }
+    Procedure MainExecution {
+        Body: solve JobSchedulingInt;
+    }
+    Procedure RecoveringSchedule {
+        Body: {
+            CurrentSelectedJob:=DATA{};
+            for (i in Job, t in Time) do
+               CurrentX(i,t):=X(i,t);
+               if(X(i,t)=1)then
+                  CurrentSelectedJob:=CurrentSelectedJob+i;
+                  CurrentSelectedJobTime(i):=Ord(t);
+               endif
+            endfor
+        }
+    }
+    Procedure EvaluationUpdatedSchedule {
+        Body: {
+            !Intialization
+            for (i in Job) do
+                JobDuration(i):=OriginalJobDuration(i);
+            endfor;
+            
+            MainExecution;
+            CurrentBadLuckJob:=DATA{};
+            for (i in BadLuckJob) do
+                CurrentBadLuckJob:=CurrentBadLuckJob+i;
+            endfor;
+            While(card(CurrentBadLuckJob)>0) do
+                 RecoveringSchedule;
+                !Pick the one with the earliest starting time
+                CurrentJob:=argmin(i|i in CurrentBadLuckJob, CurrentSelectedJobTime(i)+JobDuration(i));
+                CurrentTime:=CurrentSelectedJobTime(CurrentJob)+JobDuration(CurrentJob);
+                If(BadLuckAssignment(CurrentJob,'Failure')=1) then
+                    !Constructed an optimization problem based upon the fact that Current Job has failed
+                    Solve JobFailureReSchedule;
+                endif;
+                If(BadLuckAssignment(CurrentJob,'Delay')=1)then
+                    JobDuration(CurrentJob):=JobDuration(CurrentJob)+DelayTime(CurrentJob);
+                    Solve JobDelayReSchedule;
+                endif;
+                CurrentBadLuckJob:=CurrentBadLuckJob-CurrentJob;
+            
+            endwhile;
+        }
+    }
+    Procedure Test {
+        Body: {
+             Solve JobDelayReSchedule;
+        }
+    }
+    DeclarationSection Declarations {
+        Parameter OriginalJobDuration {
+            IndexDomain: i;
+        }
+        Parameter flag;
+        Parameter CurrentTime;
+        ElementParameter CurrentJob {
+            Range: Job;
+        }
+        Set SelectedJob {
+            SubsetOf: Job;
+        }
+        Set CurrentSelectedJob {
+            SubsetOf: Job;
+        }
+        Set FinalBenefitJob {
+            SubsetOf: SelectedJob;
+        }
+        Set FinalIntermediateJob {
+            SubsetOf: SelectedJob;
+        }
+        Set TempJob1 {
+            SubsetOf: Job;
+        }
+        Set TempJob2 {
+            SubsetOf: Job;
+        }
+        Parameter SelectedJobTime {
+            IndexDomain: i|i in SelectedJob;
+        }
+        Parameter CurrentSelectedJobTime {
+            IndexDomain: i;
+        }
+        Parameter CurrentX {
+            IndexDomain: (i,t);
+        }
+        Parameter SelectedJobFinishTime {
+            IndexDomain: i;
+        }
+        Parameter BenefitIntermediateCorrespondence {
+            IndexDomain: (i,j);
+        }
+        Set BadLuckJob {
+            SubsetOf: SelectedJob;
+        }
+        Set CurrentBadLuckJob {
+            SubsetOf: Job;
+        }
+        Set BadLuckType {
+            Index: p;
+        }
+        Parameter BadluckProb {
+            IndexDomain: (i,p);
+        }
+        Parameter DelayTime {
+            IndexDomain: i;
+        }
+        Parameter BadLuckAssignment {
+            IndexDomain: (i,p)|i in SelectedJob;
+            Range: binary;
+        }
+        Parameter mark;
+        Set SuspectedInfluencedJob {
+            SubsetOf: SelectedJob;
+        }
+        Set FinalJobDone {
+            SubsetOf: SelectedJob;
+        }
+        Parameter FinalJobTime {
+            IndexDomain: i;
+        }
+        Parameter FinalJobFinishTime {
+            IndexDomain: i;
+        }
+    }
+    Procedure MainTermination {
+        Body: {
+            return DataManagementExit();
+        }
+    }
+}
