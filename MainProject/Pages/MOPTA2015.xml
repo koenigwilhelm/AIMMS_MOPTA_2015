@@ -151,6 +151,7 @@
 			<Domain>Duration2( j )</Domain>
 			<Start>StartTime2( j )</Start>
 			<Duration>Duration2( j )</Duration>
+			<Color>ColorScheme1( j )</Color>
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Gantt Chart">
@@ -197,6 +198,7 @@
 			<Domain>Duration4( j )</Domain>
 			<Start>StartTime4( j )</Start>
 			<Duration>Duration4( j )</Duration>
+			<Color>ColorScheme2( j )</Color>
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Scalar">
@@ -428,41 +430,41 @@
 		<LineColor RGB="#000000" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="576" left="888" bottom="594" right="966" />
+		<Location top="528" left="888" bottom="546" right="966" />
 		<StaticText>Legend:</StaticText>
 		<Font GUID="808D2411-75E0-4DE4-B520-C8B6827BB089" Name="LegendTitle" />
 		<TextColor RGB="#000000" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="606" left="888" bottom="624" right="1074" />
+		<Location top="564" left="888" bottom="582" right="1074" />
 		<StaticText>Schedule/On Schedule</StaticText>
 		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
 		<TextColor RGB="#0000ff" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="642" left="888" bottom="660" right="1074" />
+		<Location top="600" left="888" bottom="618" right="1074" />
 		<StaticText>Delayed</StaticText>
 		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
 		<TextColor RGB="#ff8000" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="678" left="888" bottom="696" right="1074" />
+		<Location top="636" left="888" bottom="654" right="1074" />
 		<StaticText>Failed</StaticText>
 		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
 		<TextColor RGB="#ff0000" />
 	</PageObject>
 	<PageObject Type="Rectangle">
-		<Location top="606" left="1062" bottom="624" right="1152" />
+		<Location top="564" left="1062" bottom="582" right="1152" />
 		<FillColor RGB="#0000ff" />
 		<LineColor RGB="#0000ff" />
 	</PageObject>
 	<PageObject Type="Rectangle">
-		<Location top="642" left="1062" bottom="660" right="1152" />
+		<Location top="600" left="1062" bottom="618" right="1152" />
 		<FillColor RGB="#ff8000" />
 		<LineColor RGB="#ff8000" />
 	</PageObject>
 	<PageObject Type="Rectangle">
-		<Location top="678" left="1062" bottom="696" right="1152" />
+		<Location top="636" left="1062" bottom="654" right="1152" />
 		<FillColor RGB="#ff0000" />
 		<LineColor RGB="#ff0000" />
 	</PageObject>
@@ -471,6 +473,17 @@
 		<Shape>Open</Shape>
 		<FillColor RGB="#ffffff" />
 		<LineColor RGB="#000000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="672" left="888" bottom="690" right="1074" />
+		<StaticText>Delayed and Failed</StaticText>
+		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
+		<TextColor RGB="#00ffff" />
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="672" left="1062" bottom="690" right="1152" />
+		<FillColor RGB="#00ffff" />
+		<LineColor RGB="#00ffff" />
 	</PageObject>
 	<UsedReferences>
 		<Model>
@@ -500,6 +513,8 @@
 			<Symbol>InputBadluckBudget</Symbol>
 			<Symbol>RunProgramExecution</Symbol>
 			<Symbol>j</Symbol>
+			<Symbol>ColorScheme1</Symbol>
+			<Symbol>ColorScheme2</Symbol>
 		</Model>
 	</UsedReferences>
 </Page>

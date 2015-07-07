@@ -46,6 +46,14 @@ Model Main_JobSchedulingInteger {
         IndexDomain: j;
         Range: binary;
     }
+    ElementParameter ColorScheme1 {
+        IndexDomain: j;
+        Range: AllColors;
+    }
+    ElementParameter ColorScheme2 {
+        IndexDomain: j;
+        Range: AllColors;
+    }
     Variable X {
         IndexDomain: (i,t);
         Range: binary;
@@ -703,7 +711,7 @@ Model Main_JobSchedulingInteger {
         }
         Parameter CurrentTime;
         Parameter BudgetW {
-            InitialData: 10.0;
+            InitialData: 2.0;
         }
         Parameter CurrentBudgetW;
         Parameter CurrentTotalBenefit;
@@ -833,6 +841,40 @@ Model Main_JobSchedulingInteger {
                CurrentSelectedJob:=CurrentSelectedJob-CurrentJob;
                AlreadySelectedJob:=AlreadySelectedJob+CurrentJob;
             endwhile;
+        }
+    }
+    Procedure RecordWorstScenarioColor1 {
+        Body: {
+            for ( i|i in Job ) do
+                if ( sum( p|p in BadLuckType, WorstCaseScenario(i,p) ) > 0 ) then
+                    if ( WorstCaseScenario(i,'Failure') > 0 ) then
+                        ColorScheme1(i) := 'Red';
+                    elseif ( WorstCaseScenario(i,'Delay') > 0 ) then
+                        ColorScheme1(i) := 'Orange';
+                    elseif ( WorstCaseScenario(i,'DelayandFailure') > 0 ) then
+                        ColorScheme1(i) := 'Cyan';
+                    endif;
+                else
+                    ColorScheme1(i) := 'Blue';
+                endif;
+            endfor;
+        }
+    }
+    Procedure RecordWorstScenarioColor2 {
+        Body: {
+            for ( i|i in Job ) do
+                if ( sum( p|p in BadLuckType, WorstCaseScenario(i,p) ) > 0 ) then
+                    if ( WorstCaseScenario(i,'Failure') > 0 ) then
+                        ColorScheme2(i) := 'Red';
+                    elseif ( WorstCaseScenario(i,'Delay') > 0 ) then
+                        ColorScheme2(i) := 'Orange';
+                    elseif ( WorstCaseScenario(i,'DelayandFailure') > 0 ) then
+                        ColorScheme2(i) := 'Cyan';
+                    endif;
+                else
+                    ColorScheme2(i) := 'Blue';
+                endif;
+            endfor;
         }
     }
     Procedure NaiveLossEstimateIntialization {
@@ -1133,6 +1175,9 @@ Model Main_JobSchedulingInteger {
             endfor;
             Benefit2 := TotalBenefitWorstCase;
             
+            !
+            RecordWorstScenarioColor1;
+            
             !--------------------------- Approach 4 -------------------------------------
             for(i in Job, j in Job) do
                 !OriginalJobRelation(i,j):=JobRelation(i,j);
@@ -1186,6 +1231,9 @@ Model Main_JobSchedulingInteger {
             	Duration3(j):=sum(t|t in Time, X(j,t))*JobDuration(j)
             endfor;
             Benefit3 := TotalBenefit;
+            
+            !
+            RecordWorstScenarioColor2;
         }
     }
     Procedure DeleteProject {
@@ -1227,6 +1275,7 @@ Model Main_JobSchedulingInteger {
             endfor;
             Benefit2 := TotalBenefitWorstCase;
             !
+            RecordWorstScenarioColor1;
             
             !--------------------------- Approach 3 -------------------------------------
             
@@ -1333,6 +1382,7 @@ Model Main_JobSchedulingInteger {
             !!!
             !!
             !
+            RecordWorstScenarioColor2;
         }
     }
     Procedure WhatIfSolution {
