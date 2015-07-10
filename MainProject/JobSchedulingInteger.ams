@@ -919,6 +919,9 @@ Model Main_JobSchedulingInteger {
                 CurrentRelation(i,j):=JobRelation(i,j);
             endfor;
             
+            if(card(BadLuckJob)=0) then
+                TotalBenefitWorstCase:=TotalBenefit;
+            endif;
             while(card(BadLuckJob)>0) do
                 !Pick the one with the earliest time of bad luck
                 CurrentJob:=argmin(i|i in BadLuckJob,CurrentSelectedJobTime(i)+JobDuration(i)+AlreadyDelayed(i)*DelayTime(i));
@@ -1292,8 +1295,8 @@ Model Main_JobSchedulingInteger {
             
             !
             
-            PreviousWorstCaseBenefit:=-1;
-            TotalBenefitWorstCase:=0;
+            PreviousWorstCaseBenefit:=-100;
+            TotalBenefitWorstCase:=-50;
             
             LastTimeRestrictedJob:=DATA{};
             temp3:=0;
