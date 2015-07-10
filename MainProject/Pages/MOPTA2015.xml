@@ -5,11 +5,12 @@
 	<TemplatesTabOrderPosition>1</TemplatesTabOrderPosition>
 	<Background Inherited="true" />
 	<PageObject Type="Button">
-		<Location top="156" left="30" bottom="210" right="150" />
+		<Location top="0" left="252" bottom="36" right="462" />
 		<TabOrder>2</TabOrder>
 		<LeaveOnEnter>false</LeaveOnEnter>
 		<ButtonType>Text</ButtonType>
 		<Title>"Initialize with Data Sets 1 and 2"</Title>
+		<BackgroundColor RGB="#ffff00" />
 		<Font GUID="4EAD911B-8B73-4729-A704-B09FC68F82B2" Name="NewButtonFont" />
 		<ActionSequence>
 			<Action Type="Run">
@@ -20,11 +21,12 @@
 		</ActionSequence>
 	</PageObject>
 	<PageObject Type="Button">
-		<Location top="156" left="156" bottom="210" right="270" />
+		<Location top="42" left="252" bottom="78" right="462" />
 		<TabOrder>1</TabOrder>
 		<LeaveOnEnter>false</LeaveOnEnter>
 		<ButtonType>Text</ButtonType>
 		<Title>"Initialize with Data Set 3"</Title>
+		<BackgroundColor RGB="#ffff00" />
 		<Font GUID="4EAD911B-8B73-4729-A704-B09FC68F82B2" Name="NewButtonFont" />
 		<ActionSequence>
 			<Action Type="Run">
@@ -35,11 +37,12 @@
 		</ActionSequence>
 	</PageObject>
 	<PageObject Type="Button">
-		<Location top="702" left="30" bottom="756" right="270" />
+		<Location top="12" left="510" bottom="66" right="750" />
 		<TabOrder>4</TabOrder>
 		<LeaveOnEnter>false</LeaveOnEnter>
 		<ButtonType>Text</ButtonType>
 		<Title>"Run Program"</Title>
+		<BackgroundColor RGB="#ffff00" />
 		<Font GUID="A9136A41-13D9-40DB-9DC2-85D3586DF123" Name="ButtonFont" />
 		<ActionSequence>
 			<Action Type="Run">
@@ -50,7 +53,7 @@
 		</ActionSequence>
 	</PageObject>
 	<PageObject Type="Gantt Chart">
-		<Location top="60" left="318" bottom="246" right="792" />
+		<Location top="126" left="30" bottom="312" right="504" />
 		<TabOrder>3</TabOrder>
 		<Font GUID="E1067059-3008-44BA-9763-D9C4F0B91F45" Name="NarrowFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginLeft="5" />
@@ -73,11 +76,11 @@
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="90" left="30" bottom="120" right="258" />
+		<Location top="546" left="1116" bottom="576" right="1290" />
 		<TabOrder>6</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
-		<BackgroundColor RGB="#ffffff" />
+		<BackgroundColor RGB="#ffff80" />
 		<Layout>Text-Value</Layout>
 		<SeparatorSign>=</SeparatorSign>
 		<ExplicitIdentifier>
@@ -87,11 +90,13 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Button">
-		<Location top="120" left="30" bottom="144" right="204" />
+		<Location top="576" left="1116" bottom="600" right="1290" />
 		<TabOrder>5</TabOrder>
 		<LeaveOnEnter>false</LeaveOnEnter>
 		<ButtonType>Text</ButtonType>
 		<Title>"Input bad luck budget"</Title>
+		<BackgroundColor RGB="#ffff00" />
+		<ForegroundColor RGB="#000000" />
 		<Font GUID="00000000-0000-0000-0000-000000000001" Name="Main Font" />
 		<ActionSequence>
 			<Action Type="Run">
@@ -102,11 +107,11 @@
 		</ActionSequence>
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="24" left="30" bottom="54" right="204" />
+		<Location top="12" left="24" bottom="42" right="198" />
 		<TabOrder>7</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
-		<BackgroundColor RGB="#ffffff" />
+		<BackgroundColor RGB="#ffff80" />
 		<Layout>Text-Value</Layout>
 		<SeparatorSign>=</SeparatorSign>
 		<ExplicitIdentifier>
@@ -116,11 +121,12 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Button">
-		<Location top="54" left="30" bottom="78" right="204" />
+		<Location top="42" left="24" bottom="66" right="198" />
 		<TabOrder>8</TabOrder>
 		<LeaveOnEnter>false</LeaveOnEnter>
 		<ButtonType>Text</ButtonType>
 		<Title>"Input hurdle rate"</Title>
+		<BackgroundColor RGB="#ffff00" />
 		<Font GUID="00000000-0000-0000-0000-000000000001" Name="Main Font" />
 		<ActionSequence>
 			<Action Type="Run">
@@ -131,7 +137,7 @@
 		</ActionSequence>
 	</PageObject>
 	<PageObject Type="Gantt Chart">
-		<Location top="288" left="318" bottom="474" right="792" />
+		<Location top="606" left="30" bottom="792" right="504" />
 		<TabOrder>11</TabOrder>
 		<Font GUID="E1067059-3008-44BA-9763-D9C4F0B91F45" Name="NarrowFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginLeft="5" />
@@ -155,7 +161,7 @@
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Gantt Chart">
-		<Location top="60" left="840" bottom="246" right="1314" />
+		<Location top="378" left="618" bottom="564" right="1092" />
 		<TabOrder>9</TabOrder>
 		<Font GUID="E1067059-3008-44BA-9763-D9C4F0B91F45" Name="NarrowFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginLeft="5" />
@@ -178,7 +184,7 @@
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Gantt Chart">
-		<Location top="288" left="840" bottom="474" right="1314" />
+		<Location top="606" left="618" bottom="792" right="1092" />
 		<TabOrder>10</TabOrder>
 		<Font GUID="E1067059-3008-44BA-9763-D9C4F0B91F45" Name="NarrowFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginLeft="5" />
@@ -202,7 +208,7 @@
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="30" left="708" bottom="60" right="792" />
+		<Location top="96" left="420" bottom="126" right="504" />
 		<TabOrder>12</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
@@ -217,13 +223,13 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="42" left="318" bottom="60" right="654" />
+		<Location top="102" left="30" bottom="120" right="366" />
 		<StaticText>Approach 1: Initial Schedule</StaticText>
-		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
-		<TextColor RGB="#ff00ff" />
+		<Font GUID="4B7AE0E6-483A-455D-BBD9-6698F7F8856C" Name="ChartScheduleTitle" />
+		<TextColor RGB="#008000" />
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="258" left="708" bottom="288" right="792" />
+		<Location top="576" left="420" bottom="606" right="504" />
 		<TabOrder>14</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
@@ -238,7 +244,7 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="30" left="1230" bottom="60" right="1314" />
+		<Location top="348" left="1008" bottom="378" right="1092" />
 		<TabOrder>15</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
@@ -253,7 +259,7 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="258" left="1230" bottom="288" right="1314" />
+		<Location top="576" left="1008" bottom="606" right="1092" />
 		<TabOrder>16</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
@@ -268,7 +274,7 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Gantt Chart">
-		<Location top="558" left="318" bottom="744" right="792" />
+		<Location top="126" left="546" bottom="312" right="1020" />
 		<TabOrder>17</TabOrder>
 		<Font GUID="E1067059-3008-44BA-9763-D9C4F0B91F45" Name="NarrowFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginLeft="5" />
@@ -291,7 +297,7 @@
 		</TaskGroup>
 	</PageObject>
 	<PageObject Type="Scalar">
-		<Location top="528" left="708" bottom="558" right="792" />
+		<Location top="96" left="936" bottom="126" right="1020" />
 		<TabOrder>13</TabOrder>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
@@ -306,83 +312,78 @@
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="42" left="624" bottom="60" right="708" />
+		<Location top="108" left="336" bottom="126" right="420" />
 		<StaticText>Total Benefit</StaticText>
 		<Font GUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" Name="MainBoldFont" />
 		<TextColor RGB="#ff8040" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="540" left="624" bottom="558" right="708" />
+		<Location top="108" left="852" bottom="126" right="936" />
 		<StaticText>Total Benefit</StaticText>
 		<Font GUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" Name="MainBoldFont" />
 		<TextColor RGB="#ff8040" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="270" left="624" bottom="288" right="708" />
+		<Location top="588" left="336" bottom="606" right="420" />
 		<StaticText>Total Benefit</StaticText>
 		<Font GUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" Name="MainBoldFont" />
 		<TextColor RGB="#ff8040" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="42" left="1146" bottom="60" right="1230" />
+		<Location top="360" left="924" bottom="378" right="1008" />
 		<StaticText>Total Benefit</StaticText>
 		<Font GUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" Name="MainBoldFont" />
 		<TextColor RGB="#ff8040" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="270" left="1146" bottom="288" right="1230" />
+		<Location top="588" left="924" bottom="606" right="1008" />
 		<StaticText>Total Benefit</StaticText>
 		<Font GUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" Name="MainBoldFont" />
 		<TextColor RGB="#ff8040" />
 	</PageObject>
 	<PageObject Type="Selection Object">
 		<SelectionType>CheckBoxes</SelectionType>
-		<Location top="246" left="36" bottom="414" right="264" />
+		<Location top="114" left="1026" bottom="270" right="1152" />
 		<TabOrder>19</TabOrder>
 		<Font GUID="00000000-0000-0000-0000-000000000001" Name="Main Font" />
 		<TextShown>ElementName</TextShown>
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
-		<BackgroundColor RGB="#ffffff" />
+		<BackgroundColor RGB="#ffff80" />
 		<ExplicitIdentifier>
 			<Identifier>FlagJobDelay( j )</Identifier>
 		</ExplicitIdentifier>
 	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="222" left="30" bottom="672" right="270" />
-		<Shape>Open</Shape>
-		<FillColor RGB="#ffffff" />
-		<LineColor RGB="#000000" />
-	</PageObject>
 	<PageObject Type="Text">
-		<Location top="228" left="66" bottom="252" right="264" />
+		<Location top="96" left="1026" bottom="120" right="1176" />
 		<StaticText>What if projects delay?</StaticText>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<TextColor RGB="#ff0000" />
 	</PageObject>
 	<PageObject Type="Selection Object">
 		<SelectionType>CheckBoxes</SelectionType>
-		<Location top="450" left="36" bottom="618" right="264" />
+		<Location top="114" left="1170" bottom="270" right="1296" />
 		<TabOrder>18</TabOrder>
 		<Font GUID="00000000-0000-0000-0000-000000000001" Name="Main Font" />
 		<TextShown>ElementName</TextShown>
 		<Border Style="InShadow" Width="2" MarginTop="5" MarginRight="5" MarginBottom="5" MarginLeft="5" />
-		<BackgroundColor RGB="#ffffff" />
+		<BackgroundColor RGB="#ffff80" />
 		<ExplicitIdentifier>
 			<Identifier>FlagJobFail( j )</Identifier>
 		</ExplicitIdentifier>
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="432" left="66" bottom="456" right="264" />
+		<Location top="96" left="1170" bottom="120" right="1308" />
 		<StaticText>What if projects fail?</StaticText>
 		<Font GUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" Name="ParameterFont" />
 		<TextColor RGB="#ff0000" />
 	</PageObject>
 	<PageObject Type="Button">
-		<Location top="630" left="72" bottom="666" right="222" />
+		<Location top="276" left="1086" bottom="312" right="1236" />
 		<TabOrder>20</TabOrder>
 		<LeaveOnEnter>false</LeaveOnEnter>
 		<ButtonType>Text</ButtonType>
 		<Title>"Clear What-if Selections"</Title>
+		<BackgroundColor RGB="#ffff00" />
 		<ForegroundColor RGB="#ff0000" />
 		<Font GUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" Name="MainBoldFont" />
 		<ActionSequence>
@@ -394,102 +395,177 @@
 		</ActionSequence>
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="270" left="318" bottom="288" right="654" />
-		<StaticText>Approach 1: Worst Possible Outcome</StaticText>
+		<Location top="588" left="30" bottom="606" right="366" />
+		<StaticText>Worst Possible Outcome of Approach 1</StaticText>
 		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
-		<TextColor RGB="#ff00ff" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="42" left="840" bottom="60" right="1176" />
-		<StaticText>Approach 2: Robust Schedule</StaticText>
-		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
-		<TextColor RGB="#ff00ff" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="270" left="840" bottom="288" right="1176" />
-		<StaticText>Approach 2: Worst Possible Outcome</StaticText>
-		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
-		<TextColor RGB="#ff00ff" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="540" left="318" bottom="558" right="654" />
-		<StaticText>Schedule Adjusted for What-if Scenarios</StaticText>
-		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
-		<TextColor RGB="#ff00ff" />
-	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="24" left="312" bottom="480" right="798" />
-		<Shape>Open</Shape>
-		<FillColor RGB="#ffffff" />
-		<LineColor RGB="#000000" />
-	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="24" left="834" bottom="480" right="1320" />
-		<Shape>Open</Shape>
-		<FillColor RGB="#ffffff" />
-		<LineColor RGB="#000000" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="528" left="888" bottom="546" right="966" />
-		<StaticText>Legend:</StaticText>
-		<Font GUID="808D2411-75E0-4DE4-B520-C8B6827BB089" Name="LegendTitle" />
-		<TextColor RGB="#000000" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="564" left="888" bottom="582" right="1074" />
-		<StaticText>Schedule/On Schedule</StaticText>
-		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
-		<TextColor RGB="#0000ff" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="600" left="888" bottom="618" right="1074" />
-		<StaticText>Delayed</StaticText>
-		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
-		<TextColor RGB="#ff8000" />
-	</PageObject>
-	<PageObject Type="Text">
-		<Location top="636" left="888" bottom="654" right="1074" />
-		<StaticText>Failed</StaticText>
-		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
 		<TextColor RGB="#ff0000" />
 	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="564" left="1062" bottom="582" right="1152" />
-		<FillColor RGB="#0000ff" />
-		<LineColor RGB="#0000ff" />
-	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="600" left="1062" bottom="618" right="1152" />
-		<FillColor RGB="#ff8000" />
-		<LineColor RGB="#ff8000" />
-	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="636" left="1062" bottom="654" right="1152" />
-		<FillColor RGB="#ff0000" />
-		<LineColor RGB="#ff0000" />
-	</PageObject>
-	<PageObject Type="Rectangle">
-		<Location top="18" left="306" bottom="756" right="1326" />
-		<Shape>Open</Shape>
-		<FillColor RGB="#ffffff" />
-		<LineColor RGB="#000000" />
+	<PageObject Type="Text">
+		<Location top="354" left="618" bottom="372" right="954" />
+		<StaticText>Approach 2: Robust Schedule</StaticText>
+		<Font GUID="4B7AE0E6-483A-455D-BBD9-6698F7F8856C" Name="ChartScheduleTitle" />
+		<TextColor RGB="#008000" />
 	</PageObject>
 	<PageObject Type="Text">
-		<Location top="672" left="888" bottom="690" right="1074" />
+		<Location top="588" left="618" bottom="606" right="954" />
+		<StaticText>Worst Possible Outcome of Approach 2</StaticText>
+		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
+		<TextColor RGB="#ff0000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="108" left="546" bottom="126" right="882" />
+		<StaticText>Schedule Adjusted for What-if Scenarios</StaticText>
+		<Font GUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" Name="ChartTitle" />
+		<TextColor RGB="#008000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="948" left="888" bottom="966" right="1074" />
 		<StaticText>Delayed and Failed</StaticText>
 		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
 		<TextColor RGB="#00ffff" />
 	</PageObject>
 	<PageObject Type="Rectangle">
-		<Location top="672" left="1062" bottom="690" right="1152" />
+		<Location top="948" left="1062" bottom="966" right="1152" />
 		<FillColor RGB="#00ffff" />
 		<LineColor RGB="#00ffff" />
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="90" left="24" bottom="798" right="510" />
+		<Shape>Open</Shape>
+		<FillColor RGB="#ffffff" />
+		<LineColor RGB="#ff8000" />
+		<LineWidth>2</LineWidth>
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="90" left="540" bottom="318" right="1302" />
+		<Shape>Open</Shape>
+		<FillColor RGB="#ffffff" />
+		<LineColor RGB="#8000ff" />
+		<LineWidth>2</LineWidth>
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="84" left="18" bottom="804" right="1308" />
+		<Shape>Open</Shape>
+		<FillColor RGB="#ffffff" />
+		<LineColor RGB="#000000" />
+		<LineWidth>4</LineWidth>
+	</PageObject>
+	<PageObject Type="Line">
+		<Location top="330" left="1110" bottom="330" right="18" />
+		<LineColor RGB="#000000" />
+		<LineWidth>4</LineWidth>
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="342" left="612" bottom="798" right="1098" />
+		<Shape>Open</Shape>
+		<FillColor RGB="#ffffff" />
+		<LineColor RGB="#ff8000" />
+		<LineWidth>2</LineWidth>
+	</PageObject>
+	<PageObject Type="Line">
+		<Location top="330" left="1110" bottom="402" right="1110" />
+		<LineColor RGB="#000000" />
+		<LineWidth>4</LineWidth>
+	</PageObject>
+	<PageObject Type="Line">
+		<Location top="402" left="1110" bottom="402" right="1308" />
+		<LineColor RGB="#000000" />
+		<LineWidth>4</LineWidth>
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="384" left="132" bottom="510" right="390" />
+		<Shape>In-Shadow</Shape>
+		<FillColor RGB="#ffffff" />
+		<LineColor RGB="#000000" />
+		<LineWidth>3</LineWidth>
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="390" left="138" bottom="408" right="216" />
+		<StaticText>Legend:</StaticText>
+		<Font GUID="808D2411-75E0-4DE4-B520-C8B6827BB089" Name="LegendTitle" />
+		<TextColor RGB="#000000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="414" left="144" bottom="432" right="330" />
+		<StaticText>Schedule/On Schedule</StaticText>
+		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
+		<TextColor RGB="#0000ff" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="438" left="144" bottom="456" right="330" />
+		<StaticText>Delayed</StaticText>
+		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
+		<TextColor RGB="#ff8000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="462" left="144" bottom="480" right="330" />
+		<StaticText>Failed</StaticText>
+		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
+		<TextColor RGB="#ff0000" />
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="414" left="294" bottom="432" right="384" />
+		<FillColor RGB="#0000ff" />
+		<LineColor RGB="#0000ff" />
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="438" left="294" bottom="456" right="384" />
+		<FillColor RGB="#ff8000" />
+		<LineColor RGB="#ff8000" />
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="462" left="294" bottom="480" right="384" />
+		<FillColor RGB="#ff0000" />
+		<LineColor RGB="#ff0000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="324" left="1122" bottom="396" right="1296" />
+		<StaticText>Deterministic Approach</StaticText>
+		<Font GUID="71DF4C02-84D6-460E-BCFE-CC224B3DF3AB" Name="TitleFont" />
+		<TextColor RGB="#ff0000" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="414" left="1122" bottom="486" right="1296" />
+		<StaticText>Robust Approach</StaticText>
+		<Font GUID="71DF4C02-84D6-460E-BCFE-CC224B3DF3AB" Name="TitleFont" />
+		<TextColor RGB="#ff0000" />
+	</PageObject>
+	<PageObject Type="Line">
+		<Location top="480" left="510" bottom="492" right="546" />
+		<Shape>RightArrow</Shape>
+		<LineColor RGB="#ff8000" />
+		<LineWidth>3</LineWidth>
+	</PageObject>
+	<PageObject Type="Line">
+		<Location top="504" left="576" bottom="516" right="612" />
+		<Shape>RightArrow</Shape>
+		<LineColor RGB="#ff8000" />
+		<LineWidth>3</LineWidth>
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="474" left="552" bottom="516" right="576" />
+		<StaticText>...</StaticText>
+		<Font GUID="49AD49AB-68BC-456F-A9C4-5317F8F4D79B" Name="DotDotDotFont" />
+		<TextColor RGB="#ff8000" />
+	</PageObject>
+	<PageObject Type="Rectangle">
+		<Location top="486" left="294" bottom="504" right="384" />
+		<FillColor RGB="#00ffff" />
+		<LineColor RGB="#00ffff" />
+	</PageObject>
+	<PageObject Type="Text">
+		<Location top="486" left="144" bottom="504" right="330" />
+		<StaticText>Delayed and Failed</StaticText>
+		<Font GUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" Name="LegendSchedule" />
+		<TextColor RGB="#00ffff" />
 	</PageObject>
 	<UsedReferences>
 		<Model>
 			<Symbol>Gamma</Symbol>
 			<Symbol>FlagJobDelay</Symbol>
 			<Symbol>FlagJobFail</Symbol>
+			<Symbol>ColorScheme1</Symbol>
+			<Symbol>ColorScheme2</Symbol>
 			<Symbol>Benefit1</Symbol>
 			<Symbol>Benefit2</Symbol>
 			<Symbol>Benefit3</Symbol>
@@ -513,8 +589,6 @@
 			<Symbol>InputBadluckBudget</Symbol>
 			<Symbol>RunProgramExecution</Symbol>
 			<Symbol>j</Symbol>
-			<Symbol>ColorScheme1</Symbol>
-			<Symbol>ColorScheme2</Symbol>
 		</Model>
 	</UsedReferences>
 </Page>

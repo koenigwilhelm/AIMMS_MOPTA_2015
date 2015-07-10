@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Project AimmsVersion="4.5.3.253 unicode x64" ProjectUUID="976EB2C3-DBCF-470B-BD72-221BE59BDC42">
+<Project AimmsVersion="4.7.3.284 unicode x64" ProjectUUID="976EB2C3-DBCF-470B-BD72-221BE59BDC42">
 	<ModelFileName>JobSchedulingInteger.ams</ModelFileName>
 	<AutoSaveAndBackup>
 		<DataBackup AtRegularInterval="true" EveryNMinutes="15" NumBackupsDatedToday="3" NumDaysBeforeToday="3" />

@@ -2,11 +2,14 @@
 <UserFonts>
 	<UserFont Name="Main Font" FaceName="Arial" PointSize="80" UUID="00000000-0000-0000-0000-000000000001" />
 	<UserFont Name="ButtonFont" FaceName="Arial" PointSize="140" Bold="true" UUID="A9136A41-13D9-40DB-9DC2-85D3586DF123" InternalID="1" />
-	<UserFont Name="ParameterFont" FaceName="Arial Rounded MT Bold" PointSize="110" UUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" InternalID="2" />
+	<UserFont Name="ParameterFont" FaceName="Arial Rounded MT Bold" PointSize="90" UUID="3808F1EF-AA79-4918-928B-3F572EF1F89C" InternalID="2" />
 	<UserFont Name="MainBoldFont" FaceName="Arial Black" PointSize="80" Bold="true" UUID="F8457C0A-184B-4E27-99E5-8312EACA34CF" InternalID="3" />
 	<UserFont Name="NarrowFont" FaceName="Arial Narrow" PointSize="80" UUID="E1067059-3008-44BA-9763-D9C4F0B91F45" InternalID="4" />
 	<UserFont Name="LegendTitle" FaceName="Arial" PointSize="120" Bold="true" UUID="808D2411-75E0-4DE4-B520-C8B6827BB089" InternalID="5" />
 	<UserFont Name="LegendSchedule" FaceName="Arial Narrow" PointSize="120" Bold="true" Italic="true" UUID="76FDCFDE-116D-4BEB-89F3-1D49C811D149" InternalID="6" />
 	<UserFont Name="ChartTitle" FaceName="Verdana" PointSize="100" Bold="true" Italic="true" UUID="4A03B122-9A86-4C1F-8B25-1D216963FD3D" InternalID="7" />
 	<UserFont Name="NewButtonFont" FaceName="Arial" PointSize="100" Bold="true" UUID="4EAD911B-8B73-4729-A704-B09FC68F82B2" InternalID="8" />
+	<UserFont Name="TitleFont" FaceName="Palatino Linotype" PointSize="180" Bold="true" Underline="true" Italic="true" UUID="71DF4C02-84D6-460E-BCFE-CC224B3DF3AB" InternalID="9" />
+	<UserFont Name="DotDotDotFont" FaceName="Palatino Linotype" PointSize="220" Bold="true" UUID="49AD49AB-68BC-456F-A9C4-5317F8F4D79B" InternalID="10" />
+	<UserFont Name="ChartScheduleTitle" FaceName="Verdana" PointSize="110" Bold="true" Underline="true" Italic="true" UUID="4B7AE0E6-483A-455D-BBD9-6698F7F8856C" InternalID="11" />
 </UserFonts>
