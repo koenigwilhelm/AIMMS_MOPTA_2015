@@ -1,5 +1,6 @@
 \documentclass[final,3p,times]{elsarticle}
 
+\usepackage{lipsum}
  \usepackage{graphics}
 \usepackage[]{algorithm2e}
  \usepackage{setspace}
@@ -22,13 +23,31 @@
 
 
 
+\makeatletter
+\def\ps@pprintTitle{%
+	\let\@oddhead\@empty
+	\let\@evenhead\@empty
+	\def\@oddfoot{}%
+	\let\@evenfoot\@oddfoot}
+\makeatother
+
+
 \begin{document}
 
 \begin{frontmatter}
 
-\title{MOPTA 2015 competition report}
+\title{7th AIMMS-MOPTA competition report, Team RensPolymathIa}
 
-\author{Xin Shen, Jubiao Yang}
+%\author{Xin Shen, Jubiao Yang, John E. Mitchell}
+
+\author[rvt]{Xin Shen}
+\author[rvt]{Jubiao Yang}
+\author[rvt]{John E. Mitchell\fnref{fn3}}
+\fntext[fn3]{Team Advisor}
+
+\address[rvt]{Rensselaer Polytechnic Institute, Troy, NY 12180}
+
+
 \end{frontmatter}
 
 \section{Mathematical Formulation for problem without bad luck or with deterministic bad luck}
