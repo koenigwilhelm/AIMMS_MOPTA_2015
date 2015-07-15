@@ -185,6 +185,7 @@
 \begin{itemize}\label{StartCon}
 \item As in part 1, a single project can only be started once.
 \begin{equation}
+	\label{EqnStartOnlyOnce2}
 \sum\limits_{t} X_{it}\,\leq\,1,\forall i
 \end{equation}
 \item The starting time of a project cannot be too late. This constraint is also the same with that in part 1. Note that here since we made the choice without assuming any delay will happen, it is possible that a project will not be completed in time if it is delayed. However, we don't take the delay  in the future into account while deciding whether it should start.
@@ -222,7 +223,7 @@ Thus given the schedule $(S_{i-1},T_{i-1})$ after bad luck happens at time $t_{i
 \begin{equation}\label{UpdateOpt}
 \begin{array}{ll}
 \max\limits_{X} &NPV(S_i,T_i)\\
-s.t &(\ref{StartCon}) -(\ref{EndCon})\\
+s.t &(\ref{EqnStartOnlyOnce2}) -(\ref{EndCon})\\
     & X_{it} \in \{0,\,1\}
 \end{array}
 \end{equation}
