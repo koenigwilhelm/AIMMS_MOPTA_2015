@@ -16,6 +16,8 @@
  \usepackage{multirow}
  \usepackage{setspace}
  \usepackage{CJK}
+ \usepackage{float}
+ \restylefloat{table}
  \onehalfspacing
 
 
@@ -223,7 +225,7 @@ Output $(S',T')=(S_n,T_n)$, where n is the last time bad luck occurs.
 In the previous schedule we developed a way to estimate the loss of a schedule subject to a given set of bad luck in the context of adaptative scheduling. The question arises as to what the worst case would be like given a budget of bad luck. Currently we do not have efficient methods to incorporate adaptative scheduling into a single optimization problem. A brute force approach for assessing the worst case scenario is to try every combination of bad luck, evaluate its total benefit and choose the one with the largest loss. The method is compuationally infeasible especially when the size of scheduling network grows extremely large, since there will be exponetial number of possible combination of bad luck. 
 
 Here we adopted a greedy heuristic to assign the bad luck in order to get a relatively bad scenario. We begin with the empty triple  $(I_f, I_{\delta}, I_{f|\delta})$. In every iteration, for each possible assignment of bad luck on a single project, we add it into the triple selected temporarily, calculate the loss incured. At the end of the iteration we  pick the assignment that yields the most loss and add it to the triple permanently.  The realization of the schedule is updated taking the effect of chosen bad luck into consideration. The iteration terminates when no damage that incur loss can be added to the triple. Although there's no theoretical guarantee for the 'optimal' chocie of bad luck, the algorithm provided a way to get a comparatively bad case and help identifiy key components in the job scheduling network in a reasonable amount of time. The algorithm is as follows:
-\linebreak
+
 \begin{algorithm}[H]\label{EstimateWorst}
 \KwData{Initial Schedule (S,T), budget of bad luck W}
 \KwResult{Triple of bad luck in the worst case $(I_f, I_{\delta}, I_{f|\delta})$}
@@ -261,71 +263,115 @@ Our way to find a robust schedule is based upon a 'solve-robustify' approach. We
 \end{itemize}
 \item if project i is delayed and then failed in the worst case scenario. The treatment can be a combination of that in the case of delay and case of failure.
 \end{itemize}
-There're also many other strategies which are not  covered in our program, for example, under the condition of adapative scheduling, the starting time of certain projects, which is prequiste to many other projects but also highly suspectable to failure, can be moved forward. If they fail then other projects will get the information and won't start. Note that the above strategies does not necessarily yield a solution whose worst scenario is better than before. So each time we made a single or a set of changes to the original plan, we need to check whether the worst cas of updated one is better than the previous one.  
+There are also many other strategies which are not  covered in our program, for example, under the condition of adaptive scheduling, the starting time of certain projects, which is prerequisite to many other projects but also highly susceptible to failure, can be moved forward. If they fail then other projects will get the information and won't start. Note that the above strategies does not necessarily yield a solution whose worst scenario is better than before. So each time we made a single or a set of changes to the original plan, we need to check whether the worst case of updated one is better than the previous one.  
 
 we also need to point out that the estimation of final realization for a given triple of bad luck will still rely on the original relation between projects. Thus the scheme for updating needs slight change, for example, some relation between projects will be recovered which is incorporated into our program.
 
 \section{Computational Results}
-\subsection{Small Example}
-In the second problem, we'll begin with the solution, where we assume that no bad luck happens. The greedy  heuristic (\ref{EstimateWorst}) can be applied here. For the purpose of illustration we'll calcuate the loss for every possible bad luck happened to a single luck no matter whether the bad luck required is more than the budget. The chart below gives the loss that incured by each single occurence of bad luck when the constant $\gamma$ is equal to 0.99:
+\subsection{Smaller Dataset}
+In the second problem, we begin with the solution, where we assumed that no bad luck happens. The greedy heuristic (\ref{EstimateWorst}) can be applied here. For purpose of illustration we calculate the loss for every possible bad luck happened to a single luck no matter whether the bad luck required is more than the budget. Table \ref{TableLossIncurGammap99} gives the loss that incurred by each single occurrence of bad luck when the constant $\gamma$ is equal to 0.99.
 
-\begin{tabular}{|c|c|c|c|}
-	\hline
-	project & Failure & Delay and Failure & Delay \\
-	\hline
-	Job1 & -12.2333 & -12.3193 & -12.3193 \\
-	\hline
-	Job2 & -12.2333 & -12.3193 & -12.3193 \\
-	\hline
-	Job4 & -12.2333 & -12.3135 & -12.3135 \\
-	\hline
-	Job6 & -12.2333 & -12.3211 & -0.08775 \\
-	\hline
-	Job8 & -6.11092 & -6.30892 & -0.198 \\
-	\hline
-	Job9 & -7.77821 & -7.95372 & -0.1755 \\
-	\hline
-	Job10 & -13.789 & -13.9445 & -0.15556 \\
-	\hline
-\end{tabular}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		project & Failure & Delay and Failure & Delay \\
+		\hline
+		Job1 & -12.2333 & -12.3193 & -12.3193 \\
+		\hline
+		Job2 & -12.2333 & -12.3193 & -12.3193 \\
+		\hline
+		Job4 & -12.2333 & -12.3135 & -12.3135 \\
+		\hline
+		Job6 & -12.2333 & -12.3211 & -0.08775 \\
+		\hline
+		Job8 & -6.11092 & -6.30892 & -0.198 \\
+		\hline
+		Job9 & -7.77821 & -7.95372 & -0.1755 \\
+		\hline
+		Job10 & -13.789 & -13.9445 & -0.15556 \\
+		\hline
+	\end{tabular}
+	\caption{Loss incurred by each single bad luck occurrence, $\gamma=0.99$}
+	\label{TableLossIncurGammap99}
+\end{table}
 
-We study several choices of $\gamma$ and $W$. 
+We study several combinations of $\gamma$ and $W$. 
 \begin{itemize}
-\item We begin with a simple case $W=1$ and $\gamma=0.99$. It is obvious that none of the bad luck will happen, which is also  shown in the numerical experiment.
-\item When the budget $W=1.4$ and $\gamma=0.99$. The above chart gives the loss of each potential choice of bad luck. When W equals 1.4 it reaches the threshold for project 4 to fail. in the worst case scenario, project 4 fails and project 1 cannot be started. Two alternatives are considered. In the first approach, all decision variable for project 4 are fixed to be 0 while in the second approach, since the failure of 4 leads to the failure to 1, we'll add 3  since $\{3,4,5\}\vdash 10$. The worst case scenario of the results of the two approaches are examined, and worst case in the result of second approach is better than both the previous result and approach one. Thus we add 3 into the plan and update the chart of loss to table below. The final schedule is highly resillent to bad luck at the level of W.
+	\item We begin with a simple case $W=1$ and $\gamma=0.99$. It is obvious that none of the bad luck will happen, which is shown in Figure \ref{FigData1hp990w1p000}.
+	
+		\begin{figure}[H]
+			\centering
+			\includegraphics[trim=95mm 45mm 5mm 25mm, clip, width=14.5cm]{Data1hp990w1p000.png}
+			\caption{GUI with result, $W=1.0$, $\gamma=0.99$}
+			\label{FigData1hp990w1p000}
+		\end{figure}
+	
+	\item When the budget $W=1.4$ and $\gamma=0.99$. The above table gives the loss of each potential choice of bad luck. When $W$ equals $1.4$ it reaches the threshold for Project 4 to fail. In the worst case scenario, Project 4 fails and Project 1 cannot be started. Two alternatives are considered. In the first approach, all decision variable for Project 4 are fixed to be 0, while in the second approach, we'll add Project 3 since $\{3,4,5\}\vdash 10$, as the failure of Project 4 leads to failure of Project 1. The worst case scenario of the results of the two alternatives are examined, and worst case in the result of second approach is better than both the previous result and Approach 1. Therefore we add 3 into the plan and update the chart of loss to Table \ref{TableLossIncur} listed below.
 
-\begin{tabular}{|c|c|c|c|}
-	\hline
-	project & Failure & Delay and Failure & Delay \\
-	\hline
-	Job1 & -12.2333 & -12.3193 & -12.3193 \\
-	\hline
-	Job2 & -12.2333 & -12.3193 & -12.3193 \\
-	\hline
-	Job4 & -3.55E-15 & -0.08016 & -0.08016 \\
-	\hline
-	Job6 & -12.2333 & -12.3211 & -0.08775 \\
-	\hline
-	Job8 & -6.11092 & -6.30892 & -0.198 \\
-	\hline
-	Job9 & -7.77821 & -7.95372 & -0.1755 \\
-	\hline
-	Job10 & -13.789 & -13.9445 & -0.15556 \\
-	\hline
-	Job3 & -12.2333 & -6.39589 & -6.39589 \\
-	\hline
-\end{tabular}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|c|c|c|c|}
+				\hline
+				project & Failure & Delay and Failure & Delay \\
+				\hline
+				Job1 & -12.2333 & -12.3193 & -12.3193 \\
+				\hline
+				Job2 & -12.2333 & -12.3193 & -12.3193 \\
+				\hline
+				Job4 & -3.55E-15 & -0.08016 & -0.08016 \\
+				\hline
+				Job6 & -12.2333 & -12.3211 & -0.08775 \\
+				\hline
+				Job8 & -6.11092 & -6.30892 & -0.198 \\
+				\hline
+				Job9 & -7.77821 & -7.95372 & -0.1755 \\
+				\hline
+				Job10 & -13.789 & -13.9445 & -0.15556 \\
+				\hline
+				Job3 & -12.2333 & -6.39589 & -6.39589 \\
+				\hline
+			\end{tabular}
+			\caption{Loss incurred by each single bad luck occurrence, $\gamma=0.99$}
+			\label{TableLossIncur}
+		\end{table}
+		
+		The final schedule is highly resilient to bad luck at the level of $W$, as is shown in Figure \ref{FigData1hp990w1p400}.
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[trim=95mm 45mm 5mm 25mm, clip, width=14.5cm]{Data1hp990w1p400.png}
+			\caption{GUI with result, $W=1.4$, $\gamma=0.99$}
+			\label{FigData1hp990w1p400}
+		\end{figure}
 
-\item When the budget $W=2.5$ and $\gamma=0.99$. Under this condition the failure of project 1 will lead to the most loss. The only possible method for improvement is to restrict decision variable corresponding to project 1 to be 0. In the resulting scheduling net work we only have the project 8 and project 9. As W goes larger both 9 and 10 will fail and the best choice is doing nothing.
+	\item When the budget $W=2.5$ and $\gamma=0.99$. Under this condition the failure of Project 1 will lead to the most loss. The only possible method for improvement is to restrict decision variable corresponding to Project 1 to be 0. In the resulting scheduling net work we only have the Project 8 and Project 9.
+	
+		\begin{figure}[H]
+			\centering
+			\includegraphics[trim=95mm 45mm 5mm 25mm, clip, width=14.5cm]{Data1hp990w2p500.png}
+			\caption{GUI with result, $W=2.5$, $\gamma=0.99$}
+			\label{FigData1hp990w2p500}
+		\end{figure}
+		
+		As $W$ goes larger both Projects 9 and 10 would fail and the best choice would be doing nothing.
 
-\item When the budget $W=2.5$ and $\gamma=0.95$,  we can observe a dramatic change in the intial condition from the case $\gamma=0.99$. Only project 8 and project 9 are selected in the initial schedule. The schedule is highly vulnerable to delay, since the bad luck that will result in the most loss is delay for project 8. Since 8 cannot be moved forward, the only way that may lead to a better solution is delete 8. The resulting schedule contains no projects and of course will no longer be influenced by bad luck.
+	\item When the budget $W=2.5$ and $\gamma=0.95$,  we can observe a dramatic change in the intial condition from the case $\gamma=0.99$. Only Project 8 and Project 9 are selected in the initial schedule. The schedule is highly vulnerable to delay, since the bad luck that will result in the most loss is delay for Project 8. Since Project 8 cannot be moved forward, the only way that may lead to a better solution is to delete Project 8. The resulting schedule contains no projects and of course will no longer be influenced by bad luck.
+	
+		\begin{figure}[H]
+			\centering
+			\includegraphics[trim=95mm 45mm 5mm 25mm, clip, width=14.5cm]{Data1hp950w2p500.png}
+			\caption{GUI with result, $W=2.5$, $\gamma=0.95$}
+			\label{FigData1hp950w2p500}
+		\end{figure}
 \end{itemize}
  
-\subsection{Large Example}
-Similar to the case of small data set, for the large data set our analysis will begin with the result in part 1, which does not take any risk of failure or delay into consideration. Greedy algorithm still plays a central role in acquiring the worst case scenario. However, in the case of the larger data set, which contains 76 projects, it is time consuming to perform analysis on the loss incured by every single occurence of bad luck since the formulated optimization problem has thousands of variables. Two strategies are taken based upon the observation of the intial result in part 1:
+\subsection{Larger Dataset}
+Similar to the case of the smaller dataset, for the large data set our analysis will begin with the result with Approach 1, which does not take any risk of failure or delay into consideration. Greedy algorithm still plays a central role in acquiring the worst case scenario. However, in the case of the larger dataset, which contains 76 projects, it is time consuming to perform analysis on the loss incurred by every single occurrence of bad luck since the formulated optimization problem has thousands of variables. Two strategies are taken based upon the observation of the initial result from Approach 1:
 \begin{itemize}
-\item Most projects starts before the 18th month, which implies that even delay takes place, it is unlikely that there will be any project that cannot be completed in time. And currently we only limit our discussion to the case where the hurdle rate is large,i.e, greater than 0.99, thus the discount effect, together with additional cost of delay is trivial and the resulting loss of delay is rather neglectable when compared with that of failure. Another oberservation is that in many projects, the budget of failure is comparable to that of delay. As a result, in our analysis for the large data set we'll assume that bad luck only happens in the form of failure.
-\item Instead of giving a precisie estimation of the loss of each occurence of bad luck, we adopted the following algorithm to find a naive estimation of the failure of a single project.
+\item Most projects starts before the 18th month, which implies that even delay takes place, it is unlikely that there will be any project that cannot be completed in time. And currently we only limit our discussion to the case where the hurdle rate is large,i.e, greater than $0.99$, thus the discount effect, together with additional cost of delay is trivial and the resulting loss of delay is rather negligible when compared with that of failure. Another observation is that in many projects, the budget of failure is comparable to that of delay. As a result, in our analysis for the large data set we'll assume that bad luck only happens in the form of failure.
+\item Instead of giving a precise estimation of the loss of each occurrence of bad luck, we adopted the following algorithm to find a naive estimation of the failure of a single project.
+
 \begin{algorithm}
 \KwData{Current  Realization of Schedule (S',T')}
 \KwResult{Loss(S,'failure'), each entry represents the naive estimate of loss incured by only failing the corresponding entry in S under current realization}
@@ -344,14 +390,15 @@ $S''\,=\,\{\}$\;
     Move i from S' to S''.
 }
 \end{algorithm}
-The general idea of the algorithm is to estimate the loss of the failure of a given project based on loss of other projects that completely or partially depend on the completion of the current project. The algorithm is time efficient at the expense of accuracy. An obvious drawback for this algorithm is that if fails to grasp the interdepence of projects. However, it provided us with insight into components that has high potential to be crucial to the structure of the network.Note that the algorithm can also be extended to evaluate a naive estimation for the loss of delay.
+
+The general idea of the algorithm is to estimate the loss of the failure of a given project based on loss of other projects that completely or partially depend on the completion of the current project. The algorithm is time efficient at the expense of accuracy. An obvious drawback for this algorithm is that if fails to grasp the interdependence of projects. However, it provided us with insight into components that has high potential to be crucial to the structure of the network.Note that the algorithm can also be extended to evaluate a naive estimation for the loss of delay.
 \end{itemize}
 The graph below shows the trend for how the total benefit of worst case scenario changes against W. the blue line is for the worst case for the initial plan, and yellow line for the worst case of the robust plan.
 
 \includegraphics {mopta}
 
 
-In the robustification of the large data set, we take a conservative approach since our resource of computing is limited. We only consider the case where project i,j fails in the worst scenario, and i is in some set $I \vdash j$. The approach we take is to add other projects in set I that were not previouly selected into the plan. Another reason for not deleting failed projects is that the cost for failure does not differ much from project to project, and the deletion will make the remaining projects in the schedule more suspectable to the attack of bad luck. Here we plot how the value in the worst case changes after the robustification for a given budget of W. From the figure we can see that the robust schedule performs much better than the initial schedule in the worst scenario.
+In the robustification of the large data set, we take a conservative approach since our resource of computing is limited. We only consider the case where project i,j fails in the worst scenario, and i is in some set $I \vdash j$. The approach we take is to add other projects in set I that were not previously selected into the plan. Another reason for not deleting failed projects is that the cost for failure does not differ much from project to project, and the deletion will make the remaining projects in the schedule more susceptible to the attack of bad luck. Here we plot how the value in the worst case changes after the robustification for a given budget of W. From the figure we can see that the robust schedule performs much better than the initial schedule in the worst scenario.
 
 
 %\subsection{Impact of a single bad luck in Scheduling network}
