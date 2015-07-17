@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.7.7)  15 JUL 2015 19:18
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.7.7)  16 JUL 2015 22:31
 entering extended mode
-**Part1Formulation.tex
+**MOPTA2105reportRensPolymatheIa.tex
 
-(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\Part1Fo
-rmulation.tex
+(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\MOPTA21
+05reportRensPolymatheIa.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -97,8 +97,9 @@ File: upsy.fd 2001/06/04 font definitions for U/psy.
 \@sep=\skip43
 \@@sep=\skip44
 
-(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\Part1Fo
-rmulation.spl) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\natbib\natbib.sty"
+(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\MOPTA21
+05reportRensPolymatheIa.spl)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\natbib\natbib.sty"
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip45
 \bibsep=\skip46
@@ -106,7 +107,8 @@ LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count94
 )
 \splwrite=\write3
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
 Package: geometry 2010/09/12 v5.6 Page Geometry
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
@@ -629,12 +631,13 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 )
 \@float@every@table=\toks32
 
-(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\Part1Fo
-rmulation.aux)
+(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\MOPTA21
+05reportRensPolymatheIa.aux)
 LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 35.
 LaTeX Font Info:    Try loading font information for OML+txmi on input line 35.
 
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\txfonts\omltxmi.fd"
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\txfonts\omltxmi.fd"
 File: omltxmi.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    ... okay on input line 35.
@@ -645,7 +648,8 @@ LaTeX Font Info:    ... okay on input line 35.
 LaTeX Font Info:    Checking defaults for OMS/txsy/m/n on input line 35.
 LaTeX Font Info:    Try loading font information for OMS+txsy on input line 35.
 
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\txfonts\omstxsy.fd"
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\txfonts\omstxsy.fd"
 File: omstxsy.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    ... okay on input line 35.
@@ -811,67 +815,68 @@ LaTeX Font Info:    Font shape `OMS/txr/m/n' in size <10> not available
 (Font)              Font shape `OMS/txsy/m/n' tried instead on input line 77.
  [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3] [4] [5] [6]
-<Data1hp990w1p000.png, id=29, 1264.725pt x 766.36313pt>
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3] [4] [5] [6] [7]
+<Data1hp990w1p000.png, id=33, 1264.725pt x 766.36313pt>
 File: Data1hp990w1p000.png Graphic file (type png)
 
 <use Data1hp990w1p000.png>
-Package pdftex.def Info: Data1hp990w1p000.png used on input line 323.
-(pdftex.def)             Requested size: 412.56496pt x 238.73044pt.
- [7]
-<Data1hp990w1p400.png, id=36, 1264.725pt x 766.36313pt>
+Package pdftex.def Info: Data1hp990w1p000.png used on input line 333.
+(pdftex.def)             Requested size: 426.79134pt x 246.96103pt.
+ [8 <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPTA2015Report/Dat
+a1hp990w1p000.png>]
+<Data1hp990w1p400.png, id=41, 1264.725pt x 766.36313pt>
 File: Data1hp990w1p400.png Graphic file (type png)
 
 <use Data1hp990w1p400.png>
-Package pdftex.def Info: Data1hp990w1p400.png used on input line 361.
-(pdftex.def)             Requested size: 412.56496pt x 238.73044pt.
- [8 <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPTA2015Report/Dat
-a1hp990w1p000.png>]
+Package pdftex.def Info: Data1hp990w1p400.png used on input line 371.
+(pdftex.def)             Requested size: 426.79134pt x 246.96103pt.
+
 <Data1hp990w2p500.png, id=43, 1264.725pt x 766.36313pt>
 File: Data1hp990w2p500.png Graphic file (type png)
 
 <use Data1hp990w2p500.png>
-Package pdftex.def Info: Data1hp990w2p500.png used on input line 370.
-(pdftex.def)             Requested size: 412.56496pt x 238.73044pt.
+Package pdftex.def Info: Data1hp990w2p500.png used on input line 380.
+(pdftex.def)             Requested size: 426.79134pt x 246.96103pt.
  [9 <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPTA2015Report/Dat
-a1hp990w1p400.png> <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPT
-A2015Report/Data1hp990w2p500.png>]
-<Data1hp950w2p500.png, id=52, 1264.725pt x 766.36313pt>
+a1hp990w1p400.png>]
+<Data1hp950w2p500.png, id=50, 1264.725pt x 766.36313pt>
 File: Data1hp950w2p500.png Graphic file (type png)
 
 <use Data1hp950w2p500.png>
-Package pdftex.def Info: Data1hp950w2p500.png used on input line 381.
-(pdftex.def)             Requested size: 412.56496pt x 238.73044pt.
+Package pdftex.def Info: Data1hp950w2p500.png used on input line 391.
+(pdftex.def)             Requested size: 426.79134pt x 246.96103pt.
  [10 <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPTA2015Report/Da
-ta1hp950w2p500.png>]
-<mopta.png, id=59, 393.47pt x 213.79875pt>
+ta1hp990w2p500.png>]
+<mopta.png, id=57, 393.47pt x 213.79875pt> [11 <D:/MOPTA15/JobSchedulingInteger
+-4/JobSchedulingInteger/MOPTA2015Report/Data1hp950w2p500.png>]
 File: mopta.png Graphic file (type png)
  <use mopta.png>
-Package pdftex.def Info: mopta.png used on input line 416.
+Package pdftex.def Info: mopta.png used on input line 426.
 (pdftex.def)             Requested size: 393.46902pt x 213.79822pt.
- [11 <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPTA2015Report/mo
-pta.png>] [12]
-(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\Part1Fo
-rmulation.aux) ) 
+
+[12 <D:/MOPTA15/JobSchedulingInteger-4/JobSchedulingInteger/MOPTA2015Report/mop
+ta.png>]
+(D:\MOPTA15\JobSchedulingInteger-4\JobSchedulingInteger\MOPTA2015Report\MOPTA21
+05reportRensPolymatheIa.aux) ) 
 Here is how much of TeX's memory you used:
  6491 strings out of 493921
- 82991 string characters out of 3144874
- 268945 words of memory out of 3000000
+ 83160 string characters out of 3144874
+ 270960 words of memory out of 3000000
  9641 multiletter control sequences out of 15000+200000
  38504 words of font info for 94 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 34i,16n,30p,1121b,420s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.
-enc}<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm
-10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/rtxmi.pfb>
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/rtxr.pfb><C:/Prog
-ram Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/txex.pfb><C:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/txsy.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/txfonts/txsyc.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
-ype1/urw/times/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/ti
-mes/utmri8a.pfb>
-Output written on Part1Formulation.pdf (12 pages, 682315 bytes).
+ 34i,16n,30p,1049b,420s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvip
+s/fontname/8r.enc}<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfont
+s/symbols/msbm10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfo
+nts/rtxmi.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/rtx
+r.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/txex.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/txsy.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/txsyc.pfb><C:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/urw/times/utmri8a.pfb>
+Output written on MOPTA2105reportRensPolymatheIa.pdf (12 pages, 682496 bytes).
 PDF statistics:
  97 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
