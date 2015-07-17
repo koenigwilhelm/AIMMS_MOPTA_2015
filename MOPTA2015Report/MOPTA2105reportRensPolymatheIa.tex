@@ -164,7 +164,7 @@ The net present value of the portfolio is computed by summing up the costs and b
 	NPV_{\gamma}(S,T)\,=\,\sum_{j\in S, 0\leq t_j/12<3} \gamma^{t_j} \tilde{c}_j\,+\,\sum_{j\in S, 0\leq t_j/12<3} \gamma^{t_j+d_j} \tilde{b}_j
 \end{equation}
 
-\section{Adapative Scheduling of Projects}
+\section{Adaptive Scheduling of Projects}
 
 In practice, the original schedule is subject to update once any bad luck occurs. For example, consider a scenario where an intermediate project delays, which could lead to inability of some other projects to be completed in time. Although we can continue with the subsequent projects, a possible better option could be to remove a proportion of projects while updating the schedule. The purpose is to reduce the potential loss based upon information at the current stage. Our analysis will take the update into consideration. At each time $t^{badluck}$ when a bad luck happens, the update must follow the rules:
 \begin{itemize}
@@ -182,7 +182,7 @@ With the assumptions above, the realized schedule can be obtained by solving a s
 	\begin{equation}
 		\sum\limits_{t} X_{it}\,\leq\,1,\forall i
 	\end{equation}
-	\item As with part 1, the starting time of a project cannot be too late. To evaluate the effect of delay, since we have already assumed that no bad luck will happen after time t,it's worth to note that no delay except for the projecsts in set $I_{t\delta}$ will be considered while determining the updated schedule.
+	\item As with part 1, the starting time of a project cannot be too late. To evaluate the effect of delay, since we have already assumed that no bad luck will happen after time t,it's worth to note that no delay except for the projects in set $I_{t\delta}$ will be considered while determining the updated schedule.
 	\begin{equation}
 		\label{EqnStartOnlyOnce2}
 		\sum\limits_{t\geq T+1-d_i} X_{it}\,=\,0, \forall i
@@ -250,9 +250,9 @@ In the previous section we developed an algorithm to update the schedule when an
 \begin{equation}
 	Loss_{(S,T)}(S',T')\,=\, NPV(S',T')\,-\,NPV(S,T)
 \end{equation}
-The question arises that given a budget of bad luck, which selection of the triple $(I_f, I_{\delta}, I_{f|\delta})$  will lead to the maximum loss. A brute force approach for assessing the worst selection of the triple is to try every combination of bad luck and choose the one with the largest loss. However, because of our limited source of computing and the size of the problem, the method is compuationally infeasible especially when the number of projects grows extremely large, since there will be exponetial number of choices of the triple. 
+The question arises that given a budget of bad luck, which selection of the triple $(I_f, I_{\delta}, I_{f|\delta})$  will lead to the maximum loss. A brute force approach for assessing the worst selection of the triple is to try every combination of bad luck and choose the one with the largest loss. However, because of our limited source of computing and the size of the problem, the method is computationally infeasible especially when the number of projects grows extremely large, since there will be exponential number of choices of the triple. 
 
-An alternative method is the greedy heuristic, which  aims at finding a triple $(I_f, I_{\delta}, I_{f|\delta})$ with a large loss and is also computationally tractable. We begin with an empty triple  $(I_f, I_{\delta}, I_{f|\delta})$ and iterate based upon the current budget of bad luck and bad luck remained. In every iteration, we add a project with certain type of bad luck that yields the most loss to the triple and update the realization of the schedule. The iteration terminates when no bad luck that incurs loss can be added to the triple. The algorithm provides a way to get a bad realization of schedule and helps identifiy the key components in the schedule, although there's no theoretical proof for the worst. The algorithm is:
+An alternative method is the greedy heuristic, which  aims at finding a triple $(I_f, I_{\delta}, I_{f|\delta})$ with a large loss and is also computationally tractable. We begin with an empty triple  $(I_f, I_{\delta}, I_{f|\delta})$ and iterate based upon the current budget of bad luck and bad luck remained. In every iteration, we add a project with certain type of bad luck that yields the most loss to the triple and update the realization of the schedule. The iteration terminates when no bad luck that incurs loss can be added to the triple. The algorithm provides a way to get a bad realization of schedule and helps identify the key components in the schedule, although there's no theoretical proof for the worst. The algorithm is:
 \linebreak
 \begin{algorithm}[H]\label{EstimateWorst}
 	\KwData{Initial Schedule (S,T), budget of bad luck W}
@@ -273,27 +273,28 @@ An alternative method is the greedy heuristic, which  aims at finding a triple $
 
 
 \section{Robustification of Schedule}
-Our way to find a robust schedule is based upon a 'solve-robustify' approach. We solve the problem in part 1 and use the solution as our initial schedule. Then we apply the greedy heuristic in the last section to identify projects in the worst case scenario, which can be regarded as vulnerable to bad luck and plays an important role in the scheduling network. Given the set of these 'weak'  but 'important' components in the scheduling network, we take several strategies to robustify the networks, including:
+In the last section we apply the greedy heuristic in the last section to identify projects in the worst case scenario, which can be regarded as vulnerable to bad luck and plays an important role in the scheduling network. Given the set of these weak but important components in the schedule, we take several strategies to for robustification based upon the type of bad luck, including:
 \begin{itemize}
-\item If project i fails in the worst case scenario.
-\begin{itemize}
-\item i is the single project chosen in set I with $I\vdash j$ and j is also in the original schedule. A possible choice is to add another project in I to the schedule, this can be done by replacing the relationship $I \vdash j$ and $k \in I$ by $k \succ j$ and $I/\{k\} \vdash j$ and rerun the optimization problem in part 1. 
-\item i is the prequisite of some project j in the original schedule. It is obvious that j and subsequent projects that rely on the completion on j cannot be started. A possible way to is to solve an optimization problem with the decision variable $X_{it}$ fixed to be 0 for any t, this might result in:
-\begin{itemize}
-\item i and its subsequenct projects which depend on i will not be started
-\item Same with above. However, it is possible that some other projects, which were not selected in the previous schedule are included in the update schedule.  Another possible outcome is that the starting time of some projects, which have conflicts with deleted projects, are moved forward. 
+	\item If project i fails in the worst case scenario:
+	\begin{itemize}
+		\item i is the single project chosen in set I with $I\vdash j$ and j is also in the original schedule. Add another project $k\in I$ to the schedule. 
+		\item Delete project i. This might result in:
+		\begin{itemize}
+			\item i and subsequent projects which depend on i will not start
+			\item other projects which have conflict with i but not selected will start.
+		\end{itemize}
+	\end{itemize}
+	\item If project i is delayed in the worst case scenario:
+	\begin{itemize}
+		\item Move the starting time of i forward if possible.
+		\item Delete the project i. This may cause the same consequence as with the case of failure.
+	\end{itemize}
+	\item if project i is delayed and then failed in the worst case scenario. The treatment can be a combination of that in the case of delay and case of failure.
 \end{itemize}
-\end{itemize}
-\item If project i is delayed in the worst case scenario, 
-\begin{itemize}
-\item The approach would be checking whether the starting time of the project can be moved forward. This can be achieved by adding the time of delay to the duration of project i and solve the optimization problem in part 1 again.
-\item If some project cannot be completed in time because of the delay of i, delete i by restricting decision variables corresponding to i to be 0 and rerun the optimization problem.
-\end{itemize}
-\item if project i is delayed and then failed in the worst case scenario. The treatment can be a combination of that in the case of delay and case of failure.
-\end{itemize}
-There are also many other strategies which are not  covered in our program, for example, under the condition of adaptive scheduling, the starting time of certain projects, which is prerequisite to many other projects but also highly susceptible to failure, can be moved forward. If they fail then other projects will get the information and won't start. Note that the above strategies does not necessarily yield a solution whose worst scenario is better than before. So each time we made a single or a set of changes to the original plan, we need to check whether the worst case of updated one is better than the previous one.  
+There are also many other strategies which are not covered in our program, for example, under the condition of adaptive scheduling, the starting time of certain projects, which are prerequisite to many other projects but also highly susceptible to failure, can be moved forward. If they fail, other projects won't start.\\
 
-we also need to point out that the estimation of final realization for a given triple of bad luck will still rely on the original relation between projects. Thus the scheme for updating needs slight change, for example, some relation between projects will be recovered which is incorporated into our program.
+Note that the above strategies does not necessarily yield a solution whose worst scenario is better than before. So each time we made a single or a set of changes to the original plan, we need to check whether the worst case of updated one is better than the previous one.
+
 
 \section{Computational Results}
 \subsection{Smaller Dataset}
