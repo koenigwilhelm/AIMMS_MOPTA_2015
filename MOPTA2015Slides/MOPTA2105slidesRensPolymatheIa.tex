@@ -1,0 +1,987 @@
+\documentclass{beamer}
+%\documentclass[trans]{beamer}
+%\documentclass[handout]{beamer}
+
+\mode<presentation>
+{
+	%\usetheme{Malmoe}
+	\usetheme[secheader]{Boadilla}
+	\setbeamercovered{transparent}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{graphicx,pgf,tikz}
+\usepackage{multicol}
+\usetikzlibrary{fadings}
+
+%\usepackage{latexsym}
+%\renewcommand{\baselinestretch}{1.2}
+
+\newcommand{\real}{I\!\!\!R}
+\newcommand{\bin}{I\!\!\!B}
+%\newcommand{\cA}{{\mathcal{A}}}
+%\newcommand{\bA}{\bar{\mathcal{A}}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\bA}{\bar{A}}
+\newcommand{\my}{\Gamma} %{M(\bar{y})}
+\newcommand{\lb}{\nu}
+\newcommand{\scaleAA}{\omega}
+\newcommand{\scalei}{\eta_i}
+\newcommand{\recipscalep}{\frac{1}{\eta_p}}
+
+\newcommand{\cG}{\mathcal{G}}
+
+\newcommand{\wt}{\widetilde}
+\newcommand{\wto}{\widetilde\omega}
+\newcommand{\wh}{\widehat}
+
+\newcommand{\sgn}{{\rm sgn}}
+\newcommand{\epc}{\hspace{1pc}}
+\newcommand{\diag}{{\rm diag}}
+\newcommand{\sol}{{\rm SOL}}
+\newcommand{\onebld}{{\mbox{\boldmath $1$}}}
+\newcommand{\twobld}{{\mbox{\boldmath $2$}}}
+\newcommand{\Abld}{{\mbox{\boldmath $A$}}}
+\newcommand{\xbld}{{\mbox{\boldmath $x$}}}
+\newcommand{\ubld}{{\mbox{\boldmath $u$}}}
+\newcommand{\thalf}{{\textstyle \frac{1}{2}}}
+\newcommand{\zbld}{{\mbox{\boldmath $z$}}}
+\newcommand{\Bbld}{{\mbox{\boldmath $B$}}}
+\newcommand{\Cbld}{{\mbox{\boldmath $C$}}}
+\newcommand{\Dbld}{{\mbox{\boldmath $D$}}}
+\newcommand{\bigf}{\mathcal{F}}
+\newcommand{\bigt}{\mathcal{T}}
+\newcommand{\bign}{\mathcal{N}}
+\newcommand{\SCGF}{\scriptstyle {\mathrm GF}}
+\newcommand{\SCNP}{\scriptstyle {\mathrm NP}}
+
+%\newcommand{\ds}{{\textcolor{red}{\circle*{10}}}}
+%\newcommand{\tri}{{\textcolor{blue}{\circle*{10}}}}
+%\newcommand{\cs}{{\textcolor{green}{\circle*{10}}}}
+%\newcommand{\sps}{{\textcolor{yellow}{\circle*{10}}}}
+
+\newcommand{\bz}{\bar{z}}
+\newcommand{\tx}{\tilde{x}}
+\newcommand{\ty}{\tilde{y}}
+\newcommand{\half}{\frac{1}{2}}
+
+\newcommand{\scwork}{\mbox{\scriptsize work}}
+\newcommand{\sclb}{\mbox{\scriptsize lb}}
+\newcommand{\scub}{\mbox{\scriptsize ub}}
+
+\newcommand{\tred}{\textcolor{red}}
+\newcommand{\tblue}{\textcolor{blue}}
+\newcommand{\tmag}{\textcolor{magenta}}
+\newcommand{\tgreen}{\textcolor{green}}
+\newcommand{\bbb}{\textcolor{blue}}
+\newcommand{\grr}{\textcolor{purple}}
+\newcommand{\tgrey}{\textcolor{gray!25}}
+\newcommand{\tpink}{\textcolor{red!60}}
+\newcommand{\tcam}{\textcolor{blue!40}}
+
+%\newcommand{\ds}{\textcolor{red}{\circle*{10}}}
+%\newcommand{\tri}{{\textcolor{blue}{\circle*{10}}}}
+%\newcommand{\cs}{{\textcolor{green}{\circle*{10}}}}
+%\newcommand{\sps}{{\textcolor{yellow}{\circle*{10}}}}
+
+%\textheight 8.8in
+
+%\pagestyle{myheadings}
+
+
+%\markboth{Draft of \today}{Draft of \today}
+
+\newcommand{\til}{\char '176}
+\newcommand{\ds}{{\textcolor{red}{\circle*{10}}}}
+\newcommand{\tri}{{\textcolor{blue}{\circle*{10}}}}
+\newcommand{\cs}{{\textcolor{green}{\circle*{10}}}}
+\newcommand{\sps}{{\textcolor{yellow}{\circle*{10}}}}
+\newcommand{\tr}{\mbox{trace}}
+\newcommand{\re}{I\!\!\!R}
+\def\R{{\re}}
+
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+%\newtheorem{corollary}{Corollary}
+%\newtheorem{definition}{Definition}
+%\newtheorem{hypothesis}{Hypothesis}
+
+% Definition of the proof-environment:
+%\newenvironment{proof}{{\raggedright\bf Proof:}\quad}{\hspace*{\fill}$\fbox{ }$\\}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+%\AtBeginSubsection[]
+%{
+%  \begin{frame}<beamer>
+%    \frametitle{Outline}
+%    \tableofcontents[currentsection,currentsubsection]
+%  \end{frame}
+%}
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection,currentsubsection]
+	\end{frame}
+}
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+\beamerdefaultoverlayspecification{<+->}
+
+\title[Robust Scheduling]{A Robust Approach for Project Scheduling Problem}
+\author[Shen, Yang]{Xin Shen, Jubiao Yang\\{\small Team advisor: John E. Mitchell}}
+
+\institute[RPI]{ 
+Rensselaer Polytechnic Institute  \\
+Troy,  NY  12180}
+
+\date[MOPTA 2015]{7th AIMMS-MOPTA Optimization Modeling Competition\\\textit{Lehigh University, Bethlehem, PA}, 2015}
+
+\begin{document}
+
+\bibliographystyle{plain}
+
+\begin{frame}
+
+\titlepage
+
+\end{frame}
+
+%\nocite{basescu2,JEM_selorth,basescu3}
+
+\section*{Outline} 
+\begin{frame}[allowframebreaks]
+\tableofcontents 
+\end{frame}
+
+%\section{Abstract}
+%\begin{frame}
+%\frametitle{Abstract}
+%Mathematical programs with complementarity constraints (MPCCs) are
+%nonconvex optimization problems with applications in areas such as
+%bilevel programming, Stackelberg games, portfolio optimization,
+%compressed sensing, and inverse optimization. We discuss progress
+%in the development of methods for determining globally optimal
+%solutions to some classes of MPCCs. These methods use a variety
+%of techniques including logical Benders decomposition, branch-and-cut,
+%semidefinite programming, and copositive programming.
+%\end{frame}
+
+
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Problem Description}
+%
+%Want to solve \tblue{large structured optimization problems}.
+%
+%\bigskip
+%
+%Exploit the structure:
+%
+%\medskip
+%
+%Construct \tblue{sequences of relaxations and/or subproblems},
+%
+%\medskip
+%
+%work towards a \tgreen{provably global optimal solution} for the original problem.
+\end{frame}
+%
+
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Eg: Minimal System Realization}
+Want to design a Low order Linear Time-Invariant(LTI) system\\
+\medskip
+Denote by $H_n$ the Hankel matrix with parameters $h_1,h_2,\cdots,h_{2n-1}\in\re$:
+\begin{center}
+\begin{equation*}
+H_n\,=\,\begin{bmatrix}
+h_1&h_2&h_3&\cdots&h_n\\
+h_2&h_3&h_4&\cdots&h_{n+1}\\
+h_3&h_4&h_5&\cdots&h_{n+2}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+h_n&h_{n+1}&h_{n+2}&\cdots&h_{2n-1}\\\end{bmatrix}
+\end{equation*}
+\end{center}
+%\begin{center}
+%\fbox{$\begin{array}{ll}
+%\displaystyle{
+%{\operatornamewithlimits{\mbox{minimize}}_{(w,b)}}
+%} & \underbrace{C \, \displaystyle{
+%\sum_{i=1}^n
+%} \, \max\left\{ \, | \, w^Tx^i + b - y_i \, |
+%- \varepsilon, \, 0 \, \right\} + \thalf \, w^Tw}_{\mbox{standard SVM objective}}   \\ [0.65in]
+%& + \, \gamma \, \underbrace{\displaystyle{
+%\sum_{i=1}^n
+%} \, \left\{ \begin{array}{ll}
+%1 & \mbox{if $| \, w^Tx^i + b - y_i \, | \, > \, \varepsilon$}
+%\\ [0.1in]
+%0 & \mbox{if $| \, w^Tx^i + b - y_i \, | \, \leq \, \varepsilon$}
+%\end{array} \right.}_{\mbox{number of misclassified points}}
+%\end{array}
+%$}
+%\end{center}
+\bigskip
+Fact: Let $h_1, h_2, \cdots h_n$ be givien real numbers. Then there exists a minimal Linear Time-Invariant system of order r if and only if
+\begin{center}
+\begin{displaymath}
+r\,=\, \min\limits_{h_{n+1},\cdots,h_{2n-1}\in\re} ~\mbox{rank} (H_n)
+\end{displaymath}
+\end{center}
+(Fazel)
+\end{frame}
+
+\begin{frame}
+\frametitle{Eg: Minimal System Realization(Continued)}
+The problem can be expressed as:
+\begin{center}
+\fbox{$\begin{array}{ll}
+\displaystyle{
+{\operatornamewithlimits{\mbox{minimize}}_{H_n, s}}
+} & \mbox{rank}~H_n\\
+\mbox{subject to} & l_i\,\leq\,s_i\,\leq\,u_i,~~i\,=\,1,\cdots,n\\
+&h_{n+1},\cdots,h_{2n-1}\,\in\,\re
+\end{array}$}
+\end{center}
+where: \\
+\medskip
+$\bullet$ $s_i\,=\,\sum_{k=1}^i h_k$ denote the terms in the step response. \\
+\medskip
+$\bullet$ $l_i$ lower bound of step response at the $i$th term.\\
+\medskip
+$\bullet$ $u_i$ upper bound of step response at the $i$th term.\\
+\medskip
+(Fazel)
+\end{frame}
+%
+%\begin{frame}
+%\frametitle{Eg: }
+%Given portfolio $x^0$
+%in  standard unit simplex $\Delta_n \triangleq \{ x \in \mathbb{R}^n_+ \mid \onebld^T x = 1 \}$,  \\
+%consider a portfolio revision problem as follows:
+%\begin{center}
+%\fbox{$\begin{array}{ll}
+%\displaystyle{
+%{\operatornamewithlimits{\mbox{minimize}}_{x \in \Delta_n}}
+%} & \underbrace{\displaystyle{
+%\frac{c}{2}
+%} \, \underbrace{x^TVx}_{\mbox{variance}} + c^{\, \prime} \mbox{ VaR}_{\beta}(x)}_{\mbox{
+%composite risk measure}} + \underbrace{K \, \| \, x - x^0 \, \|_0}_{\mbox{portfolio revision cost}}
+%\\ [0.65in]
+%\mbox{subject to} & \mu^Tx \, \geq \, R \epc \mbox{(expected portfolio return)},
+%\end{array}$}
+%\end{center}
+%where $\mbox{VaR}_{\beta}(x)$
+%is the \textcolor{blue}{$\beta$-value-at-risk} of the portfolio $x$ with $\beta \in (0,1)$.
+%\end{frame}
+
+
+
+
+\section{Simple Case: Modeling without Bad Luck}
+
+%\subsection*{Motivation}
+%
+%\begin{frame}
+%\frametitle{L0-norm minimization}
+%
+%Want to solve:
+%\begin{displaymath}
+%\tblue{\min_x \{f(x) \, + \, \gamma || x ||_0 \, : \, Ax \, \geq \, b, \, x \in \re^n\}}
+%\end{displaymath}
+%where $A \in \re^{m \times n}$, $b \in \re^m$, and $||x||_0 = \mbox{card}\{x_i \, : \, x_i \neq 0\}$.
+%
+%\medskip
+%
+%The parameter $\gamma$ reflects the relative importance of sparsity and~$f(x)$.
+%
+%%We look at MPCC formulations of this problem and compare them computationally
+%%with an $L_1$ convex approximation.
+%%
+%%\bigskip
+%%
+%%The $L_1$ convex approximation is:
+%%
+%%\begin{displaymath}
+%%\tmag{\min_x \{ || x ||_1 \, : \, Ax \, \geq \, b, \, x \in \re^n\}}
+%%\end{displaymath}
+%
+%\bigskip
+%
+%$L_0$-norm minimization is of interest in feature selection,
+%compressed sensing, misclassification minimization,
+%and almost any problem where a sparse solution is desired.
+%
+%
+%
+%\end{frame}
+
+
+\subsection*{Formulation}
+
+
+\begin{frame}
+\frametitle{SDCMPCC formulation}
+
+Want to solve:
+\begin{displaymath}
+\tblue{\min_X \{\mbox{rank} (X) \, : \, X\,\in\,\mathcal{C} ~\mbox{and}~ X \in \mathbb{S}^{n}_+\}}
+\end{displaymath}
+
+\bigskip
+
+Equivalently:
+
+\begin{displaymath}
+\begin{array}{lll}
+\min_{X,U} & n\,-\,<I, U> \\  [5pt]
+\mbox{subject to} & X\,\in\,\mathcal{C} \\ [5pt]
+& 0 \, \preceq \, U \preceq \, I  \\ [5pt]
+& {\tblue{0 \, \preceq \, X \,\perp\, U \succeq \, 0}}
+%\mbox{subject to} & Ax^+ \, - \, Ax^- \, \geq \, b \\ [5pt]
+%& 0 \, \leq \, \xi \leq \, \mathbf{1}  \\ [5pt]
+%& \tblue{0 \, \leq \, \xi_i \, \perp \, x^+_i \, + x^-_i \, \geq \, 0} & i=1,\ldots,n  \\ [5pt]
+%& \tblue{0 \, \leq \, x^+_i \, \perp \, x^-_i \, \geq \, 0} &  i=1,\ldots,n
+\end{array}
+\end{displaymath}
+
+\bigskip
+When $X$ and $U$ p.s.d, $X\perp U$ is equivalent to:
+\begin{displaymath}
+<X, U>\,=\,0
+\end{displaymath}
+\end{frame}
+
+\begin{frame}
+Note that if X has the eigenvalue decomposition, 
+\begin{displaymath}
+X\,=\,P^T \Sigma P
+\end{displaymath}
+then we can choose 
+\begin{displaymath}
+U=P_0 \,P_0^T
+\end{displaymath}
+where $P_0$ is composed of columns in P corresponding to 0 eigenvalue of X.
+
+\bigskip
+
+Thus, it is obvious that $rank(X)=n-<I, U>$.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{SDCMPCC formulation}
+%If we do not require $X\in\mathbb{S}^n$ to be p.s.d, then we can add constraints:
+%\begin{displaymath}
+%X\,=\,X^+\,-\,X^-~\mbox{and}~Y\,=\,\left[\begin{array}{clcr}
+%X^+&0\\
+%0&X^-\end{array}\right]\,\succ\,0
+%\end{displaymath}
+%In the objective we'll minimize the rank of the p.s.d matrix $Y$.
+
+\bigskip
+We can apply the SDCMPCC formulation to the general case $X\in\re^{m\times n}$  by introducing an auxiliary variable Z:
+\begin{displaymath}
+Z\,=\,\left[\begin{array}{clcr}
+G&X^T\\
+X&B\end{array}\right]\succeq 0
+\end{displaymath} 
+For any X, can find matrix $G$ and $B$ such that $Z\succeq 0$ and $rank(Z)=rank(X)$\\
+\bigskip
+In the objective, we want to minimize the rank of $Z$.
+
+\end{frame}
+
+
+%No need for any big-$M$ terms in this MPCC formulation.
+
+
+%\begin{frame}
+%\frametitle{Complementarity formulation}
+%
+%\begin{displaymath}
+%\begin{array}{lll}
+%\min_{x^{\pm},\xi} & f(x) \, + \, \sum_{i=1}^n (1 - \xi_i)
+%\qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad   \\  [5pt]
+%\mbox{subject to} & Ax \, \geq \, b \\ [5pt]
+%& 0 \, \leq \, \xi \leq \, \mathbf{1}  \\ [5pt]
+%& \only<1>{\tblue{0 \, \leq \, \xi \, \perp \, x}}
+%\only<2>{\tmag{0 \, \leq \, \xi \perp \, x^+ + x^- \, \geq \, 0, \,\, 0 \leq x^+ \perp x^- \geq 0, \,\,
+%x=x^+-x^-}} 
+%%\mbox{subject to} & Ax^+ \, - \, Ax^- \, \geq \, b \\ [5pt]
+%%& 0 \, \leq \, \xi \leq \, \mathbf{1}  \\ [5pt]
+%%& \tblue{0 \, \leq \, \xi_i \, \perp \, x^+_i \, + x^-_i \, \geq \, 0} & i=1,\ldots,n  \\ [5pt]
+%%& \tblue{0 \, \leq \, x^+_i \, \perp \, x^-_i \, \geq \, 0} &  i=1,\ldots,n
+%\end{array}
+%\end{displaymath}
+%
+%\bigskip
+%
+%This is a \tblue{half-complementary} formulation; \\
+%\only<1>{\quad}
+%\only<2>{can also get a \tmag{full-complementary} formulation by splitting $x=x^+-x^-$.}
+%
+%\end{frame}
+
+\begin{frame}
+\frametitle{Constraint Qualification of SDCMPCC Formulation}
+Common Constraint qualifications such as LICQ and Robinson CQ are violated for SDCMPCC.
+
+\bigskip
+Here we consider \tblue{Local Calmness}.
+
+
+\begin{definition}
+Suppose that $\bar{x}$ is a local optimal solution to the problem:
+\begin{equation}\label{VP}
+\displaystyle{
+{\operatornamewithlimits{\mbox{minimize}}_{x \, \in \,X}}}  ~~f(x) ~~
+\mbox{subject to} ~~ x \in \mathcal{L}~\mbox{and}~~g(x) \in -\mathcal{K}
+\end{equation}
+ Problem(\ref{VP}) is said to be calm of order $\alpha >0$ at $\bar{x}$ if there exists $M<\infty$ such that, for any sequence $\{z^q\}$ with $0\neq z^q\rightarrow 0$ and any sequence $\{x_q\}\subset \mathcal{L}$ satisfying $x^q\rightarrow \bar{x}$ and $g(x^q)\in z^q -\mathcal{K}$, there holds
+\begin{equation}
+\frac{f(x^q)\,-\,f(\bar{x})}{||z^q||^{\alpha}}+M \,\geq\,0
+\end{equation} 
+\end{definition}
+%It also holds under  additional assumptions with nonlinear constraints.
+%
+%\bigskip
+\end{frame}
+
+\begin{frame}
+\frametitle{Constraint Qualification of SDCMPCC Formulation}
+Huang et.al shows that local calmness or order 1 implies the existence of KKT multipliers:
+\begin{theorem}
+Let $\bar{x}$ be a local optimal solution to Problem(\ref{VP}) and (\ref{VP}) is calm of order 1 at $\bar{x}$. Then, there exists $\mu\in K^*$ such that the system:
+\begin{equation*}
+\begin{array}{ll}
+&0\,\in\,\partial f(\bar{x})\,+\,\mu(\nabla g(\bar{x}))\,+\,N_{\mathcal{L}}(\bar{x})\\[0.15in]
+&\mu(g(\bar{x}))\,=\,0
+%&\mu_i\,\geq\,0,\qquad\forall i\,=\,1\,\cdots m\\[0.15in]
+%&<\mu_{m+1}, g_{m+1}(\bar{x})>\,=\,0\\[0.15in]
+%&\mu_{m+1}\,\in\,\mathbb{S}^n_+
+\end{array}
+\end{equation*}
+is consistent. $N_{\mathcal{L}}(\bar{x})$ is the Clarke normal cone of $\mathcal{L}$ at $\bar{x}$.
+\end{theorem}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Constraint Qualification of SDCMPCC Formulation}
+\begin{proposition}
+\tmag{Calmness of Order 1} holds at each local optimum $(\bar{X},\bar{U})$ in the SDCMPCC Formulation.
+\end{proposition}
+In the proof, let $(X^q, U^q)$ be a feasible solution to the perturbed SDCMPCC Formulation with perturbation parameter $(z^q, r^q, h_1^q, h_2^q)$.\\
+\medskip
+Want to show the existence of $M<\infty$ that satisfies:
+\begin{displaymath}
+\tblue{(n - <I, U^q>)\,-\,(n-<I,\bar{U}>)\,\geq\,-M ||(z^q, r^q, h_1^q, h_2^q)||}
+\end{displaymath}
+for any $(X^q, U^q)\rightarrow(\bar{X},\bar{U})$.\\
+\medskip
+An upper bound of $n-<I,\bar{U}>$ is $rank(\bar{X})$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Sketch of Proof}
+Want to get a lower bound for $n-<I,U^q>$.
+$(X^q, U^q)$ is feasible to the perturbed problem:
+\begin{equation*} 
+\begin{array}{ll}
+\displaystyle{
+{\operatornamewithlimits{\mbox{minimize}}_{X, U \, \in \, \mathbb{S}^n}}
+} &n\,-\,<I,\,U>\\ [0.15in]
+\mbox{subject to} & X\,+\,z^q \in \tilde{\mathcal{C}}\cap \mathcal{S}^n_+\\[0.15in]
+&- <X,\,U>\,\leq\,r^q\\[0.15in]
+& <X,\,U>\,\leq\,r^q\\[0.15in]
+& I\,-\,U\,\succeq\,-h_1^q\, I\\[0.15in]
+%& \lambda_{min}(X)\,\geq\, -h_1\\[0.15in]
+& U\,\succeq\, -h_2^q\, I
+\end{array}
+\end{equation*}
+The lower bound can be acquired by fixing $X\,=\,X^q$ in the perturbed problem.
+\end{frame}
+
+\begin{frame}
+\frametitle{Sketch of Proof}
+%Want to show the existence of $M<\infty$:
+%\begin{displaymath}
+%\tblue{(n - <I, U^q>)\,-\,(n-<I,\bar{U}>)\,\geq\,-M ||(z^q, r^q, h_1^q, h_2^q)||}
+%\end{displaymath}
+%for any $(z^q, r^q,  h_1^q, h_2^q)\rightarrow 0$ and $(X^q, U^q)\rightarrow (\bar{X},\bar{U})$.\\
+%\bigskip
+%An upper bound of $n-<I,\bar{U}>$ is $rank(\bar{X})$. 
+%\bigskip
+
+By fixing $X=X^q$ we can get the following problem:
+\begin{equation*} 
+\begin{array}{ll}
+\displaystyle{
+{\operatornamewithlimits{\mbox{minimize}}_{U \, \in \, \mathbb{S}^n}}
+} &n\,-\,<I,\,U>\\ [0.15in]
+\mbox{subject to} %& X\,+\,z^q \in \tilde{\mathcal{C}}\cap \mathcal{S}^n_+\\[0.15in]
+&- <X^q,\,U>\,\leq\,r^q,\qquad y_1\\[0.15in]
+& <X^q,\,U>\,\leq\,r^q,\qquad y_2\\[0.15in]
+& I\,-\,U\,\succeq\,-h_1^q\, I,\qquad \Omega_1\\[0.15in]
+%& \lambda_{min}(X)\,\geq\, -h_1\\[0.15in]
+& U\,\succeq\, -h_2^q\, I,\qquad \Omega_2
+\end{array}
+\end{equation*}
+where $y_1, y_2, \Omega_1, \Omega_2$ are the Lagrangian multipliers for the corresponding constraints.
+\medskip
+
+$U^q$ is feasible to the above problem.
+
+\medskip
+Slater condion holds for the above problem. Can find a lower bound the objective by \tblue{Strong Duality}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sketch of Proof}
+The dual problem is:
+\begin{equation*} 
+\begin{array}{ll}
+\displaystyle{
+{\operatornamewithlimits{\mbox{maximize}}_{y_1,y_2\in \mathbb{R},\,\Omega_1, \Omega_2 \, \in \, \mathbb{S}^n}}
+} &n+r^q\,y_1+r^q\,y_2-(1+h_1^q)trace(\Omega_1)-h_2^q\,trace(\Omega_2)\\ [0.15in]
+\mbox{subject to}% & X_n\,+\,p \in \tilde{\mathcal{C}}\\[0.15in]
+& -y_1\,X^q\,+\,y_2\,X^q\,-\,\Omega_1\,+\,\Omega_2\,=\,-I\\[0.15in]
+&y_1,\,y_2\,\leq\,0\\[0.15in]
+&\Omega_1,\,\Omega_2\,\succeq\,0
+\end{array}
+\end{equation*}
+%\end{frame}
+By diagonalizing $X^q$ we can get a tightened problem:
+\begin{equation*} \label{TXFixedPSDPerturbedDual}
+\begin{array}{ll}
+\displaystyle{
+{\operatornamewithlimits{\mbox{maximize}}_{y_1,y_2\in \mathbb{R},\,f,\,g \, \in \, \mathbb{R}^n}}
+} &n\,+\,r^q\,y_1\,+\,r^q\,y_2\,-\,(1\,+\,h_1^q)\,\sum_i f_i \,-\,h_2^q\,\sum_i g_i\\ [0.15in]
+\mbox{subject to}% & X_n\,+\,p \in \tilde{\mathcal{C}}\\[0.15in]
+& -y_1\,\lambda_i^q\,+\,y_2\,\lambda_i^q\,-\,f_i\,+\,g_i\,=\,-1,\,\forall i\,=\,1\cdots n\\[0.15in]
+&y_1,\,y_2\,\leq\,0\\[0.15in]
+&f_i,\,g_i\,\geq\,0,\,\forall i\,=\,1\cdots n
+\end{array}
+\end{equation*}
+%where $\lambda_i^q$ is the $i$th largest eigenvalue of $X^q$.
+\end{frame}
+%\begin{frame}
+%\frametitle{Constraint Qualification of SDCMPCC Formulation}
+%
+%\begin{quote}
+%This point is a \tblue{local minimizer} and a \tmag{strongly stationary point}
+%of the SDCMPCC formulation.
+%\end{quote}
+%When $f(x)\equiv 0$, all feasible x with corresponding assignment of $\xi$ are local minimizers.
+%
+%\end{frame}
+\begin{frame}
+\frametitle{Sketch of Proof}
+Since $X^q\rightarrow \bar{X}$, $\lambda_i^q\rightarrow\lambda_i$. Can get a lower bound for the objective of the dual problem, which is:
+\begin{displaymath}
+%\begin{array}
+\mbox{rank}(X)\,-\,\frac{2r^q}{\tilde{\lambda}}\,-\,(n-rank(X))(h_1^q+(1\,+\,h_1^q)\frac{2}{\tilde{\lambda}}\,||z^q||)-\,\frac{h_2^q}{\tilde{\lambda}}\,||\bar{X}||^*
+%\end{array}
+\end{displaymath}
+where $\tilde{\lambda}$ is the smallest positive eigenvalue of $\bar{X}$.
+\bigskip
+We can take 
+\begin{displaymath}
+M\,=\,\frac{2}{\tilde{\lambda}}\,+\,\frac{1}{\tilde{\lambda}}||\bar{X}||^*\,+\,(n-rank(X))(1+\frac{4}{\tilde{\lambda}})
+\end{displaymath}
+\end{frame}
+
+\begin{frame}
+\frametitle{KKT Condition of SDCMPCC Formulation}
+Given $\mathcal{C}\,=\,\{X\,|\,<A_i, X>\, \geq \, b_i, \, \forall i\,=\,1\cdots p\}$\\
+The KKT condition is:
+\begin{equation}\label{ExactKKTCondition}
+\begin{array}{ll}
+0\,\preceq\,U&\,\perp\,-I\,+\,\mu\, X\,+Y\,\succeq 0 \\[0.15in]
+0\,\preceq\,X&\,\perp\,-\sum\lambda_i A_i\,+\,\mu\, U\,\succeq 0 \\[0.15in]
+0\,\preceq\,Y&\,\perp\,I- U\,\succeq 0\\[0.15in]
+0\,\,\leq\,\lambda_i&\,\perp\,b_i\,-\,<A_i, X_i>\,\geq\,0, \forall i\,=1\,\cdots,p
+\end{array}
+\end{equation}
+Where $\lambda, \mu$ and Y are lagrangian multipliers corresponding to the constraints $A(X)=b$, $<X,U>=0$ and $I-U\succeq 0$ respectively.\\
+\bigskip
+\tblue{Any feasible pair $(X, U)$ with U given by $P_0 P_0^T$ with columns of $P_0$ to be the eigenvectors in the null space of $X$ ,is a KKT stationary point of the SDCMPCC Formulation.}
+
+%\bigskip
+%
+%Under certain conditions, the solution to the relaxed formulation is a
+%solution to a reweighted version of the $L1$-norm minimization problem.
+
+\end{frame}
+
+
+
+
+
+
+
+%\begin{frame}
+%\frametitle{Comparison with Weighted $L1$ Optimization Problem}
+%Definition: A point y is called \tmag{nondominated} if there does not exist $\tilde{y}$ such that $|\,\tilde{y}\,|\,\leq\, |\,y\,|,\tilde{y}\,\neq\, \,y$
+%
+%\bigskip
+%Nondominated points in the feasible region can be obtained by Weighted $L1$ Minimization with strict positive weights.
+%
+%\bigskip
+%The limit point $x^*$ of local optimums to $NLP(\epsilon)$ must be nondominated.
+%\end{frame}
+%
+%\begin{frame}
+%%Give ExpLP as an example
+%%\frametitle{$x=()$ is not a local optimum to NLP }
+%\tmag{Not all} nondominated points are the limit point of local optima of $NLP(\epsilon)$  as $\epsilon\rightarrow 0$. 
+%Consider the following problem:\\
+%%\begin{minipage}{2.1in}
+%%\includegraphics[scale=0.25]{ExpLP.jpg}
+%%\end{minipage}
+%\begin{minipage}{0.1in}
+%\
+%\end{minipage}
+%\begin{minipage}{2.1in}
+%\begin{equation*}\label{ExampleL0}
+%\begin{array}{ll}
+%\displaystyle{
+%{\operatornamewithlimits{\mbox{minimize}}_{x \, \in \, \mathbb{R}^2}}
+%} & \| \, x \, \|_0 \\ [0.15in]
+%\mbox{subject to} & 10\, x_1\,+\,x_2 \, \geq \,21 \\
+%&x_1\,+\,2\,x_2\,\geq\,4\\
+%&x \, \geq \, 0
+%\end{array}
+%\end{equation*}
+%\end{minipage}
+%\bigskip\\
+%(2,1) is a solution to weighted $L1$ minimization problem for certain choice of weight.
+%
+%\bigskip
+%However, it can not be the x part of a limit point of local optima of $NLP(\epsilon)$ as $\epsilon\rightarrow 0$. 
+%\end{frame}
+%
+%%\begin{frame}
+%%\frametitle{Relationship with a Piecewise Problem}
+%%Want to solve a generalized version of $L0$ optimization problem:
+%%\begin{displaymath}
+%%\tblue{\min_x \{f(x) \, + \, \beta || x ||_0 \, : \, c_{\mathcal{E}}(x) \, = \, 0, c_{\mathcal{I}}(x) \, \leq \, 0, \, x \in \re^n\}}
+%%\end{displaymath}
+%%\bigskip
+%%
+%%For any feasible point $\bar{x}$, consider a piecewise problem
+%%\begin{equation*}
+%%\tblue{\min_x \{f(x) : \, c_{\mathcal{E}}(x) \, = \, 0, c_{\mathcal{I}}(x) \, \leq \, 0, \, x_i=0\, \textrm{ if } \bar{x}_i=0,\,x\in \re^n\}}
+%%\end{equation*}
+%%\bigskip
+%%
+%%Under LICQ, if $\bar{x}$ is the limit point of local optimums to $NLP(\epsilon)$ as $\epsilon\rightarrow 0$, then  Second Order Necessary Condition is satisfied at $\bar{x}$ in the piecewise problem.
+%%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Completely positive formulation}
+%The cone of completely positive matrices is defined as:
+%\begin{equation*}
+%\mathcal{C}_n\,=\,\{\sum_{i=1}^k x_i x_i^T: x_i\in \mathcal{R}_+^n\mbox{ for } i\,=\,1\cdots k\}
+%\end{equation*}
+%
+%\bigskip
+%< , > denotes the Frobenius product of two matrices
+%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Completely positive formulation(Continue)}
+%Consider the problem with $L0$ objective, and the feasible region is the intersection of a linear subspace and nonnegative orthant.
+%\begin{displaymath}
+%\begin{array}{lll}
+%\min_{x,\xi} & \sum_{i=1}^n (1 - \xi_i)  \\  [5pt]
+%\mbox{subject to} &  Ax \, = \, b, \\ [5pt]
+%%& 0 \, \leq \, x^+, x^- \\ [5pt]
+%& 0 \, \leq \,\xi \, \leq \, \mathbf{1}\\ [5pt] 
+%& 0\, \leq\,x \\[5pt]
+%%&\xi\, \leq \, \mathbf{1}\\ [5pt]
+%& \sum_{i=1}^n\xi_i \,x_i\,\leq\,0 \\ [5pt]
+%%&\xi_i \, x_i \,\leq\,\epsilon,\qquad \mu^-_i & i=1,\ldots,n % \\ [5pt]
+%%& \tblue{0 \, \leq \, x^+_i \, \perp \, x^-_i \, \geq \, 0} &  i=1,\ldots,n
+%\end{array}
+%\end{displaymath}
+%Add an auxillary variable $s\geq 0$ and replace the contraint $\xi\leq\mathbf{1}$ by $\xi + s = \mathbf{1}$
+%\end{frame}
+%
+%
+%\begin{frame}
+%\frametitle{Completely positive formulation(Continue)}
+%Have the completely positive formulation:
+%\begin{equation*} \label{eq:COP}
+%\begin{array}{ll}
+%\displaystyle{
+%{\operatornamewithlimits{\mbox{minimize}}_{x, \, \xi}}
+%} & \onebld_n^T ( \, \onebld_n - \xi \, ) \, = \, \displaystyle{
+%\sum_{i=1}^n
+%} \, ( \, 1 - \xi_i \, ) \\ [0.15in]
+%\mbox{subject to}&\left[\begin{array}{clcr}
+%1&x^T&\xi^T&s^T\\
+%x&Y_1&Y_4^T&Y_6^T\\
+%\xi&Y_4&Y_2&Y_5^T\\
+%s&Y_6&Y_5&Y_3\end{array}\right]\, \in\, \mathcal{C}_{3n+1}\\
+% \mbox{and}& a_i^T x\, = \, b_i,\qquad\forall i\in 1\cdots m,\\ [7pt]
+%&<a_i a_i^T\,,\,Y_1>\,=\,b_i^2,\qquad\forall i\in 1\cdots m,\\[7pt]
+%%& 0 \, \leq \, \xi \\ [7pt]
+%%&0\,\leq\, x\\[7pt]
+%& <\mathcal{I}_n,\,Y_4>\,\leq\,0\\ [7pt]
+%&\xi_i\,+\,s_i\,=\,1,\qquad\forall i=1\cdots n,\\[7pt]
+%& <diag(e_i)\,,\,Y_2+Y_3+2*Y_5>\,=\,1, \forall i=1\cdots n
+%\end{array}
+%\end{equation*}
+%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Completely positive formulation}
+%The completely positive formulation has the same objective value with the complementarity formulation. The proof does not require the boundedness of x.\\
+%\bigskip
+%All the constraints are convex.\\
+%\bigskip
+%It is NP-hard to verify whether a matrix is completely positive or not
+%\end{frame}
+%
+%
+%
+%
+%
+%
+%%\begin{frame}
+%%\frametitle{Penalty method}
+%%Can \tblue{penalize violations of complementarity} in many ways:  \\ [5pt]
+%%
+%%$\bullet$ Add $(x^++x^-)^T\xi$ to the objective function. \\ [5pt]
+%%
+%%$\bullet$ Add $(x^++x^-)^T\xi \, + \, (x^+)^Tx^-$  to the objective function.  \\ [2pt]
+%%\quad Corresponds to the AMPL keyword ``complements'' \\ \quad when using knitro.  \\ [5pt]
+%%
+%%{$\bullet$ Add $\tred{(}((x^++x^-)^T\xi\tred{)^2}$ to the objective function.}  \\ [5pt]
+%%
+%%\only<1>{$\bullet$ Add $\tred{(}(x^++x^-)^T\xi \, + \, (x^+)^Tx^-)\tred{)^2}$  to the objective function.}
+%%\only<2>{\tblue{$\bullet$ Add $\tred{(}(x^++x^-)^T\xi \, + \, (x^+)^Tx^-)\tred{)^2}$  to the objective function.}} \\ [5pt]
+%%
+%%$\bullet$ Use the Fischer-Burmeister function, or some other NCP function.
+%%
+%%\bigskip
+%%
+%%Theoretical investigation is ongoing.
+%%
+%%\bigskip
+%%
+%%\pause
+%%
+%%Surprisingly, the \tblue{fourth formulation} has worked well in our tests.
+%%
+%%
+%%\end{frame}
+%%
+%
+%\subsection*{Computational Results}
+%
+%\begin{frame}
+%\frametitle{Test problems}
+%Examine three classes of problems:  
+%
+%\bigskip
+%
+%$\bullet$ Minimize L0-norm, without another objective~$f(x)$.
+%
+%\medskip
+%
+%$\bullet$ Look at weighted combinations of $f(x)$ and L0-norm.
+%
+%\medskip
+%
+%$\bullet$ Look at signal recovery problems.
+%
+%\bigskip
+%
+%In each case, compare solutions obtained by a nonlinear programming
+%package (KNITRO, SNOPT, CONOPT, MINOS) for our complementarity formulation
+%with an L1-norm formulation.
+%
+%\bigskip
+%
+%Have no guarantee of global optimality.
+%
+%\end{frame}
+%
+%\subsection*{Minimize L0-norm}
+%
+%\begin{frame}
+%\frametitle{Minimize number of non zeroes}
+%
+%
+%\begin{displaymath}
+%\begin{array}{ll}
+%  \min_{x\in\real^n} \quad&  \|x\|_{0,1} \\
+%  \text{s.t.} \quad& A x \geq b.
+%\end{array}
+%\end{displaymath}
+%
+%Look at four formulations:
+%
+%\bigskip
+%
+%\begin{tabular}{ll}
+%\tblue{MILP:} & integer programming formulation with a big-$M$ \\  [5pt]
+%\tblue{L1:} & $L1$-approximation solved as an LP.  \\  [2pt]
+%&  Objective reweighted iteratively (Candes et al). \\  [5pt]
+%\tblue{fullcomp:} & complementarity formulation solved as NLP  \\  [5pt]
+%\tblue{halfcomp:} & modified complementarity formulation, solved as NLP
+%\end{tabular}
+%
+%\bigskip
+%
+%
+%\tgreen{Test problems}
+%
+%$A$ and $b$ generated randomly, each entry in $U[-1,1]$.
+%\end{frame}
+%
+%%\begin{frame}
+%%\frametitle{$A$ is $30 \times 50$: \\ 50 test problems, various solvers and start points}
+%%\includegraphics[scale=0.5]{Test1_Small_LP_Reweight.jpeg}
+%%\end{frame}
+%
+%%\begin{frame}
+%%\frametitle{$A$ is $300 \times 500$: 50 test problems}
+%%\includegraphics[scale=0.5]{Test1_Large_LP_Reweight.jpeg}
+%%\end{frame}
+%
+%%\begin{frame}
+%%\frametitle{$A$ is $300 \times 500$: performance profile of sparsity}
+%%\includegraphics[scale=0.5]{Test1_PerformanceProfile.jpeg}
+%%\end{frame}
+%
+%
+%%\begin{frame}
+%%\frametitle{Comments on preliminary results}
+%%
+%%The complementarity formulations generally give \tblue{sparser solutions}
+%%than the $L1$ LP formulation.
+%%
+%%\medskip
+%%
+%% Best of  ten runs with Knitro is \tmag{always better} than  $L1$ solution:  \\  [5pt]
+%% \qquad on average, only 26\% worse than MILP solution.  \\ %[3pt]
+%% \qquad in contrast, $L1$ solution is 3 times worse than MILP solution.
+%%
+%%\medskip
+%%
+%%Occasionally, a complementarity formulation gives a bad solution.
+%%This is less true with the last two starting point choices.
+%%Both these choices exploit a \tblue{warm start} based on the $L1$ LP solution.
+%%
+%%\medskip
+%%
+%%The \tblue{half-complementarity} formulation gives fewer poor solutions than the
+%%full-complementarity formulation.
+%%
+%%%\medskip
+%%%
+%%%We are trying to understand why Knitro is so effective.
+%%
+%%\end{frame}
+%
+%\subsection*{Pareto frontier}
+%
+%\begin{frame}
+%\frametitle{Weighted combinations}
+%
+%\begin{displaymath}
+%\begin{array}{ll}
+%  \min_{x\in\real^n} \quad&  q(x) + \beta\|x\|_{0,1} \\
+%  \text{s.t.} \quad& A x \geq b.
+%\end{array}
+%\end{displaymath}
+%
+%\bigskip
+%
+%Solve for each norm for various different choices of~$\beta$.
+%
+%\bigskip
+%
+%In our tests, $A$ is $30 \times 50$, $q(x)$ is  strictly convex
+%quadratic function.
+%
+%\medskip
+%
+%The L0-norm formulations are solved using KNITRO under AMPL.
+%
+%\end{frame}
+%
+%%\begin{frame}
+%%\frametitle{Pareto frontier}
+%%\includegraphics[scale=0.5]{Test2_Small_Pareto.jpeg}
+%%\end{frame}
+%
+%\subsection*{Signal recovery}
+%
+%\begin{frame}
+%\frametitle{Signal recovery}
+%
+%\begin{displaymath}
+%  \min_{x\in\real^n} \quad  \|Ax-b\|_2^2 + \beta\|x\|_{0,1}
+%\end{displaymath}
+%
+%\bigskip
+%
+%Look at different choices of regularizing parameter $\beta$.
+%
+%\medskip
+%
+%$A$ is $256 \times 1024$. \\
+%In original signal, 40 entries of $x$ are nonzero. \\
+%Random noise is added to give~$b$.
+%
+%\bigskip
+%
+%L1-norm results are improved by \tblue{debiasing}:  \\
+%fix zeroes in L1 solution at zero, then look for best least squares fit.  \\
+%L1-debiased leads to many small nonzero components in our tests.
+%
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{Signal recovery mean square error}
+%\includegraphics[scale=0.7]{Test3_CPLEXMSE.pdf}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{Signal recovery sparsity}
+%\includegraphics[scale=0.7]{Test3_CPLEXSparsity.pdf}
+%\end{frame}
+\section{Robust Scheduling with Bad Luck}
+
+
+\section{Conclusions}
+
+
+
+
+
+
+\end{document}
