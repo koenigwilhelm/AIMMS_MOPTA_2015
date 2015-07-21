@@ -188,7 +188,7 @@ Troy,  NY  12180}
 			\smallskip
 			$\bullet$ \tcam{single precedence} (e.g. a project is decomposed into phases)\\
 			\smallskip
-			$\bullet$ \tgreen{alternative precedence} (e.g. parallel-approach effort to overcome technical hurdles)
+			$\bullet$ \tgreen{alternative precedence} (e.g. parallel-approach effort to overcome a technical hurdle)
 		\end{frame}
 		
 		\begin{frame}
@@ -236,7 +236,7 @@ Troy,  NY  12180}
 					0, & \text{otherwise}
 				\end{cases}
 			\end{equation*}
-			User-controlled parameters $q^{\delta}_j$ and $q^f_j$:
+			User-controlled binary parameters $q^{\delta}_j$ and $q^f_j$:
 			\begin{equation*}
 				\begin{array}{cl}
 					q^{\delta}_j= &
@@ -304,11 +304,11 @@ Define:\\
 	&I_{\delta}\,=\, \{\mbox{Project that delays but succeeds}\}\\
 	&I_{f|\delta}\,=\, \{\mbox{Project that delays and then fails}\}\\
 \end{align*}
-Each project has probabilities to delay, to fail, or to delay and then fail. The cost of each occurence of bad luck can be calculated from these probabilities. The total cost is:
-\begin{equation*}
-	w(I_f, I_{\delta}, I_{f|\delta})\,:=\,\sum_{j\in I_f} [-log_2(p_{f,j})]\,+\,\sum_{j\in I_{\delta}}[-log_2((1-p_{f,j})p_{\delta,j})]\,+\,\sum_{j\in I_{f|\delta}}[-log_2((1-p_{f,j}))]
-\end{equation*}
-\bigskip
+Each project has probabilities to delay, to fail, or to delay and then fail. The cost of each occurence of bad luck can be calculated from these probabilities. The total cost must be less than or equal to the bad luck budget.\\
+%\begin{equation*}
+%	w(I_f, I_{\delta}, I_{f|\delta})\,:=\,\sum_{j\in I_f} [-log_2(p_{f,j})]\,+\,\sum_{j\in I_{\delta}}[-log_2((1-p_{f,j})p_{\delta,j})]\,+\,\sum_{j\in I_{f|\delta}}[-log_2((1-p_{f,j}))]
+%\end{equation*}
+\medskip
 \tblue{Given a bad luck budget W,  want to find a schedule $(S, T)$ that yields the largest NPV in the worst case.}
 \end{frame}
 
@@ -362,7 +362,7 @@ The deadline is Month 36
 \frametitle{Adaptive Scheduling}
 \begin{figure}
 \includegraphics[scale=0.35, width=11cm, height=1.5cm]{Adapt2.png}
-\caption{Schedule affected by bad luck}
+\caption{Project 2 delayed by 2 months}
 \end{figure}
 Project 3 cannot be completed by the deadline.
 \begin{figure}
@@ -375,7 +375,32 @@ Delete Project 3 in the updated schedule.
 \begin{frame}
 \frametitle{Adaptive Scheduling}
 \bigskip
-Given an initial schedule $\tblue{(S, T)}$ and a triple of bad luck $\tblue{(I_f, I_{\delta}, I_{f|\delta})}$, can get a final realization $\tblue{(S', T')}$ by solving a series of optimization problems.
+Given an initial schedule $\tblue{(S, T)}$ and a triple of bad luck $\tblue{(I_f, I_{\delta}, I_{f|\delta})}$, can simulate and get a final realization $\tblue{(S', T')}$ by solving a series of optimization problems.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{General Framework}
+We use a \tblue{Solve and Robustify} approach to find a robust schedule.
+\medskip
+\begin{algorithm}[H]
+         \KwData{Initial Schedule $(S,T)$, budget of bad luck W}
+
+%	\KwResult{Robust Schedule $(S', T')$}.
+
+	\While{Stopping Criteria not satisfied}{
+
+		Find $(I_f, I_{\delta}, I_{f|\delta})$ in the worst case scenario under \tblue{Adaptive Scheduling}\;
+
+                  Robustify $(S, T)$ based upon $(I_f, I_{\delta}, I_{f|\delta})$ \;
+	}       
+
+Output $(S,T)$
+\end{algorithm} 
+\medskip
+
+The initial schedule can be the solution in the simple case.
 \end{frame}
 
 \begin{frame}
@@ -385,26 +410,6 @@ Given an initial schedule $\tblue{(S, T)}$ and a triple of bad luck $\tblue{(I_f
 Cannot incorporate adaptive scheduling into a single optimization problem.\\
 \bigskip
 \tblue{Brute-force approach}: Try every combination of $(I_f, I_{\delta}, I_{f|\delta})$ and pick the one that yields the maximum loss. Computationally infeasible.
-\end{frame}
-
-\begin{frame}
-\frametitle{General Framework}
-\begin{algorithm}[H]
-         \KwData{Initial Schedule $(S,T)$, budget of bad luck W}
-\medskip
-%	\KwResult{Robust Schedule $(S', T')$}.
-\medskip
-	\While{Stopping Criteria not satisfied}{
-\medskip
-		Find $(I_f, I_{\delta}, I_{f|\delta})$ in the worst case scenario under \tblue{Adaptive Scheduling}\;
-\medskip
-                  Robustify $(S, T)$ based upon $(I_f, I_{\delta}, I_{f|\delta})$ \;
-	}       
-\medskip
-Output $(S,T)$
-\end{algorithm} 
-
-The initial schedule can be the solution in the simple case.
 \end{frame}
 
 \begin{frame}
@@ -419,26 +424,48 @@ The initial schedule can be the solution in the simple case.
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+    \begin{frame}
 \frametitle{Estimation of Worst Case Scenario}
 
 \begin{algorithm}[H]
-         \KwData{Initial Schedule (S,T), budget of bad luck W,$(I_f, I_{\delta}, I_{f|\delta})=\emptyset$}
-	\KwResult{Triple of bad luck in the worst case $(I_f, I_{\delta}, I_{f|\delta})$}
-	\While{1}{
-		\For{i in S, p in $\{Failure, delay, both\}$ with $W_{ip}\leq W$}{
-                       
-                       
-		}
-%		\eIf{There exist some project i with type bad luck that incurs positive loss}{
-%			pick the one that with the largest loss\;
-%			W=W-$W_{ip}$\; 
-%		}{
-%		Jump out of the loop\;
-	}       
+\KwData{Initial Schedule (S,T), budget of bad luck W,$(I_f, I_{\delta}, I_{f|\delta})=\emptyset$}
+\KwResult{Triple of bad luck in the worst case $(I_f, I_{\delta}, I_{f|\delta})$}
+\While{The bad luck budget is not used up}{
+Add the project with type of bad luck that yields the maximum loss into the triple $(I_f, I_{\delta}, I_{f|\delta})$.
+%	\For{i in S, p in $\{Failure, delay, both\}$ with $W_{ip}\leq W$}{
+% 
+% 
+%	}
+%	\eIf{There exist some project i with type bad luck that incurs positive loss}{
+%	pick the one that with the largest loss\;
+%	W=W-$W_{ip}$\; 
+%	}{
+%	Jump out of the loop\;
+} 
 
 \end{algorithm} 
 \end{frame}
+
+%\begin{frame}
+%\frametitle{Estimation of Worst Case Scenario}
+%
+%\begin{algorithm}[H]
+%         \KwData{Initial Schedule (S,T), budget of bad luck W,$(I_f, I_{\delta}, I_{f|\delta})=\emptyset$}
+%	\KwResult{Triple of bad luck in the worst case $(I_f, I_{\delta}, I_{f|\delta})$}
+%	\While{1}{
+%		\For{i in S, p in $\{Failure, delay, both\}$ with $W_{ip}\leq W$}{
+%                       
+%                       
+%		}
+%%		\eIf{There exist some project i with type bad luck that incurs positive loss}{
+%%			pick the one that with the largest loss\;
+%%			W=W-$W_{ip}$\; 
+%%		}{
+%%		Jump out of the loop\;
+%	}       
+%
+%\end{algorithm} 
+%\end{frame}
 
 
 \begin{frame}
@@ -544,6 +571,15 @@ The small-size Example contains 13 projects. We test variuous choices of bad luc
 \end{figure}
 \end{frame}
 
+ \begin{frame}
+\frametitle{Large-size Example}
+$\bullet$ The large-size example contains 77 projects.\\
+\bigskip
+$\bullet$ We assume the hurdle rate is high and only considers project failure in the worst case scenario.\\
+\bigskip
+$\bullet$ We approximate the loss incured by the failure on each project in the greedy heuristic.
+\end{frame}
+
 \begin{frame}
 \frametitle{Large-size Example}
 \begin{center}
@@ -559,7 +595,12 @@ The small-size Example contains 13 projects. We test variuous choices of bad luc
 			\end{center}
 		\end{frame}
 
-	\section{Conclusions}
+	\section*{End}
+		\begin{frame}
+			\begin{center}
+				\Huge Thank you!
+			\end{center}
+		\end{frame}
 
 
 

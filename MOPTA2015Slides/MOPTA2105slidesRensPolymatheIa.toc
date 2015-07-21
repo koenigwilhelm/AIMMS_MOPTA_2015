@@ -4,4 +4,3 @@
 \beamer@sectionintoc {3}{Deterministic Approach}{6}{0}{2}
 \beamer@sectionintoc {4}{Robust Scheduling}{14}{0}{3}
 \beamer@sectionintoc {5}{Computational Experiment}{34}{0}{4}
-\beamer@sectionintoc {6}{Conclusions}{40}{0}{5}
