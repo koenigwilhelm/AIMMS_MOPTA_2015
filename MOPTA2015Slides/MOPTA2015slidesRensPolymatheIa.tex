@@ -298,11 +298,11 @@ Troy,  NY  12180}
 \section{Robust Scheduling}
 \begin{frame}
 \frametitle{Problem Description}
-Define:\\
+Define:
 \begin{align*}
 	&I_f\,=\, \{\mbox{Project that fails}\}\\
 	&I_{\delta}\,=\, \{\mbox{Project that delays but succeeds}\}\\
-	&I_{f|\delta}\,=\, \{\mbox{Project that delays and then fails}\}\\
+	&I_{f|\delta}\,=\, \{\mbox{Project that delays and then fails}\}
 \end{align*}
 Each project has probabilities to delay, to fail, or to delay and then fail. The cost of each occurence of bad luck can be calculated from these probabilities. The total cost must be less than or equal to the bad luck budget.\\
 %\begin{equation*}
@@ -310,6 +310,10 @@ Each project has probabilities to delay, to fail, or to delay and then fail. The
 %\end{equation*}
 \medskip
 \tblue{Given a bad luck budget W,  want to find a schedule $(S, T)$ that yields the largest NPV in the worst case.}
+
+\begin{equation*}
+	\max_{S,T}&\qquad\min_{I_f, I_{\delta}, I_{f|\delta}}\qquad NPV_{\gamma}'(S,T,I_f, I_{\delta}, I_{f|\delta})
+\end{equation*}
 \end{frame}
 
 %\begin{frame}
