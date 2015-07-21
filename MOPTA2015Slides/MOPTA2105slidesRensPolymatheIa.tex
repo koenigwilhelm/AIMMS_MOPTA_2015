@@ -20,6 +20,18 @@
 \usepackage{graphicx,pgf,tikz}
 \usepackage{multicol}
 \usetikzlibrary{fadings}
+\usepackage[]{algorithm2e}
+\usepackage{subfig}
+\usepackage{tabularx}
+\usepackage{multirow}
+ \usepackage{setspace}
+ \usepackage{CJK}
+ 
+ \newlength{\alignheight}
+ \newlength{\alignwidth}
+ \newcommand{\fakeheight}[3]{%
+   \makebox[#1][c]{\rule[-.5\dimexpr#2\relax]{0pt}{#2}\raisebox{-.5\height}{#3}}%
+ }
 
 %\usepackage{latexsym}
 %\renewcommand{\baselinestretch}{1.2}
@@ -183,7 +195,7 @@ Troy,  NY  12180}
 			\frametitle{Introduction}
 			Projects are subject to risks of bad luck (\torange{delay}/\tred{failure}/\tcyan{delay and failure}).\\
 			\bigskip
-			\textbf{\textit{Deterministic Approach}}: prepare for a certain bad-luck scenario beforehand (incl. scenario with no bad luck) and suggest a portfolio.\\
+			\textbf{\textit{Deterministic Approach}}: prepare for a certain bad-luck scenario beforehand (incl. scenario with no bad luck) and schedule a portfolio.\\
 			\smallskip
 			disproportionate depreciation of portfolio value can be caused by "chain reaction" of bad lucks, thanks to project dependencies.\\
 			\bigskip
@@ -249,6 +261,7 @@ Troy,  NY  12180}
 		\end{frame}
 		
 		\begin{frame}
+			\frametitle{Formulation}
 			\begin{itemize}
 				\item a project can start at most once:
 					\begin{equation*}
@@ -266,6 +279,7 @@ Troy,  NY  12180}
 		\end{frame}
 		
 		\begin{frame}
+			\frametitle{Formulation}
 			\begin{itemize}
 				\item for $I\,\vdash\,j$, j cannot be started until at least one of the projects in I has been finished:
 					\begin{equation*}
@@ -281,646 +295,271 @@ Troy,  NY  12180}
 
 
 
+\section{Robust Scheduling}
 \begin{frame}
-\frametitle{SDCMPCC formulation}
-
-Want to solve:
-\begin{displaymath}
-\tblue{\min_X \{\mbox{rank} (X) \, : \, X\,\in\,\mathcal{C} ~\mbox{and}~ X \in \mathbb{S}^{n}_+\}}
-\end{displaymath}
-
-\bigskip
-
-Equivalently:
-
-\begin{displaymath}
-\begin{array}{lll}
-\min_{X,U} & n\,-\,<I, U> \\  [5pt]
-\mbox{subject to} & X\,\in\,\mathcal{C} \\ [5pt]
-& 0 \, \preceq \, U \preceq \, I  \\ [5pt]
-& {\tblue{0 \, \preceq \, X \,\perp\, U \succeq \, 0}}
-%\mbox{subject to} & Ax^+ \, - \, Ax^- \, \geq \, b \\ [5pt]
-%& 0 \, \leq \, \xi \leq \, \mathbf{1}  \\ [5pt]
-%& \tblue{0 \, \leq \, \xi_i \, \perp \, x^+_i \, + x^-_i \, \geq \, 0} & i=1,\ldots,n  \\ [5pt]
-%& \tblue{0 \, \leq \, x^+_i \, \perp \, x^-_i \, \geq \, 0} &  i=1,\ldots,n
-\end{array}
-\end{displaymath}
-
-\bigskip
-When $X$ and $U$ p.s.d, $X\perp U$ is equivalent to:
-\begin{displaymath}
-<X, U>\,=\,0
-\end{displaymath}
-\end{frame}
-
-\begin{frame}
-Note that if X has the eigenvalue decomposition, 
-\begin{displaymath}
-X\,=\,P^T \Sigma P
-\end{displaymath}
-then we can choose 
-\begin{displaymath}
-U=P_0 \,P_0^T
-\end{displaymath}
-where $P_0$ is composed of columns in P corresponding to 0 eigenvalue of X.
-
-\bigskip
-
-Thus, it is obvious that $rank(X)=n-<I, U>$.
-
-\end{frame}
-
-\begin{frame}
-\frametitle{SDCMPCC formulation}
-%If we do not require $X\in\mathbb{S}^n$ to be p.s.d, then we can add constraints:
-%\begin{displaymath}
-%X\,=\,X^+\,-\,X^-~\mbox{and}~Y\,=\,\left[\begin{array}{clcr}
-%X^+&0\\
-%0&X^-\end{array}\right]\,\succ\,0
-%\end{displaymath}
-%In the objective we'll minimize the rank of the p.s.d matrix $Y$.
-
-\bigskip
-We can apply the SDCMPCC formulation to the general case $X\in\re^{m\times n}$  by introducing an auxiliary variable Z:
-\begin{displaymath}
-Z\,=\,\left[\begin{array}{clcr}
-G&X^T\\
-X&B\end{array}\right]\succeq 0
-\end{displaymath} 
-For any X, can find matrix $G$ and $B$ such that $Z\succeq 0$ and $rank(Z)=rank(X)$\\
-\bigskip
-In the objective, we want to minimize the rank of $Z$.
-
-\end{frame}
-
-
-%No need for any big-$M$ terms in this MPCC formulation.
-
-
-%\begin{frame}
-%\frametitle{Complementarity formulation}
-%
-%\begin{displaymath}
-%\begin{array}{lll}
-%\min_{x^{\pm},\xi} & f(x) \, + \, \sum_{i=1}^n (1 - \xi_i)
-%\qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad   \\  [5pt]
-%\mbox{subject to} & Ax \, \geq \, b \\ [5pt]
-%& 0 \, \leq \, \xi \leq \, \mathbf{1}  \\ [5pt]
-%& \only<1>{\tblue{0 \, \leq \, \xi \, \perp \, x}}
-%\only<2>{\tmag{0 \, \leq \, \xi \perp \, x^+ + x^- \, \geq \, 0, \,\, 0 \leq x^+ \perp x^- \geq 0, \,\,
-%x=x^+-x^-}} 
-%%\mbox{subject to} & Ax^+ \, - \, Ax^- \, \geq \, b \\ [5pt]
-%%& 0 \, \leq \, \xi \leq \, \mathbf{1}  \\ [5pt]
-%%& \tblue{0 \, \leq \, \xi_i \, \perp \, x^+_i \, + x^-_i \, \geq \, 0} & i=1,\ldots,n  \\ [5pt]
-%%& \tblue{0 \, \leq \, x^+_i \, \perp \, x^-_i \, \geq \, 0} &  i=1,\ldots,n
-%\end{array}
-%\end{displaymath}
-%
-%\bigskip
-%
-%This is a \tblue{half-complementary} formulation; \\
-%\only<1>{\quad}
-%\only<2>{can also get a \tmag{full-complementary} formulation by splitting $x=x^+-x^-$.}
-%
-%\end{frame}
-
-\begin{frame}
-\frametitle{Constraint Qualification of SDCMPCC Formulation}
-Common Constraint qualifications such as LICQ and Robinson CQ are violated for SDCMPCC.
-
-\bigskip
-Here we consider \tblue{Local Calmness}.
-
-
-\begin{definition}
-Suppose that $\bar{x}$ is a local optimal solution to the problem:
-\begin{equation}\label{VP}
-\displaystyle{
-{\operatornamewithlimits{\mbox{minimize}}_{x \, \in \,X}}}  ~~f(x) ~~
-\mbox{subject to} ~~ x \in \mathcal{L}~\mbox{and}~~g(x) \in -\mathcal{K}
-\end{equation}
- Problem(\ref{VP}) is said to be calm of order $\alpha >0$ at $\bar{x}$ if there exists $M<\infty$ such that, for any sequence $\{z^q\}$ with $0\neq z^q\rightarrow 0$ and any sequence $\{x_q\}\subset \mathcal{L}$ satisfying $x^q\rightarrow \bar{x}$ and $g(x^q)\in z^q -\mathcal{K}$, there holds
-\begin{equation}
-\frac{f(x^q)\,-\,f(\bar{x})}{||z^q||^{\alpha}}+M \,\geq\,0
-\end{equation} 
-\end{definition}
-%It also holds under  additional assumptions with nonlinear constraints.
-%
-%\bigskip
-\end{frame}
-
-\begin{frame}
-\frametitle{Constraint Qualification of SDCMPCC Formulation}
-Huang et.al shows that local calmness or order 1 implies the existence of KKT multipliers:
-\begin{theorem}
-Let $\bar{x}$ be a local optimal solution to Problem(\ref{VP}) and (\ref{VP}) is calm of order 1 at $\bar{x}$. Then, there exists $\mu\in K^*$ such that the system:
+\frametitle{Problem Description}
+Define:\\
+\begin{align*}
+	&I_f\,=\, \{\mbox{Project that fails}\}\\
+	&I_{\delta}\,=\, \{\mbox{Project that delays but succeeds}\}\\
+	&I_{f|\delta}\,=\, \{\mbox{Project that delays and then fails}\}\\
+\end{align*}
+Each project has probabilities to delay, to fail, or to delay and then fail. The cost of each occurence of bad luck can be calculated from these probabilities. The total cost is:
 \begin{equation*}
-\begin{array}{ll}
-&0\,\in\,\partial f(\bar{x})\,+\,\mu(\nabla g(\bar{x}))\,+\,N_{\mathcal{L}}(\bar{x})\\[0.15in]
-&\mu(g(\bar{x}))\,=\,0
-%&\mu_i\,\geq\,0,\qquad\forall i\,=\,1\,\cdots m\\[0.15in]
-%&<\mu_{m+1}, g_{m+1}(\bar{x})>\,=\,0\\[0.15in]
-%&\mu_{m+1}\,\in\,\mathbb{S}^n_+
-\end{array}
+	w(I_f, I_{\delta}, I_{f|\delta})\,:=\,\sum_{j\in I_f} [-log_2(p_{f,j})]\,+\,\sum_{j\in I_{\delta}}[-log_2((1-p_{f,j})p_{\delta,j})]\,+\,\sum_{j\in I_{f|\delta}}[-log_2((1-p_{f,j}))]
 \end{equation*}
-is consistent. $N_{\mathcal{L}}(\bar{x})$ is the Clarke normal cone of $\mathcal{L}$ at $\bar{x}$.
-\end{theorem}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Constraint Qualification of SDCMPCC Formulation}
-\begin{proposition}
-\tmag{Calmness of Order 1} holds at each local optimum $(\bar{X},\bar{U})$ in the SDCMPCC Formulation.
-\end{proposition}
-In the proof, let $(X^q, U^q)$ be a feasible solution to the perturbed SDCMPCC Formulation with perturbation parameter $(z^q, r^q, h_1^q, h_2^q)$.\\
-\medskip
-Want to show the existence of $M<\infty$ that satisfies:
-\begin{displaymath}
-\tblue{(n - <I, U^q>)\,-\,(n-<I,\bar{U}>)\,\geq\,-M ||(z^q, r^q, h_1^q, h_2^q)||}
-\end{displaymath}
-for any $(X^q, U^q)\rightarrow(\bar{X},\bar{U})$.\\
-\medskip
-An upper bound of $n-<I,\bar{U}>$ is $rank(\bar{X})$.
-\end{frame}
-
-\begin{frame}
-\frametitle{Sketch of Proof}
-Want to get a lower bound for $n-<I,U^q>$.
-$(X^q, U^q)$ is feasible to the perturbed problem:
-\begin{equation*} 
-\begin{array}{ll}
-\displaystyle{
-{\operatornamewithlimits{\mbox{minimize}}_{X, U \, \in \, \mathbb{S}^n}}
-} &n\,-\,<I,\,U>\\ [0.15in]
-\mbox{subject to} & X\,+\,z^q \in \tilde{\mathcal{C}}\cap \mathcal{S}^n_+\\[0.15in]
-&- <X,\,U>\,\leq\,r^q\\[0.15in]
-& <X,\,U>\,\leq\,r^q\\[0.15in]
-& I\,-\,U\,\succeq\,-h_1^q\, I\\[0.15in]
-%& \lambda_{min}(X)\,\geq\, -h_1\\[0.15in]
-& U\,\succeq\, -h_2^q\, I
-\end{array}
-\end{equation*}
-The lower bound can be acquired by fixing $X\,=\,X^q$ in the perturbed problem.
-\end{frame}
-
-\begin{frame}
-\frametitle{Sketch of Proof}
-%Want to show the existence of $M<\infty$:
-%\begin{displaymath}
-%\tblue{(n - <I, U^q>)\,-\,(n-<I,\bar{U}>)\,\geq\,-M ||(z^q, r^q, h_1^q, h_2^q)||}
-%\end{displaymath}
-%for any $(z^q, r^q,  h_1^q, h_2^q)\rightarrow 0$ and $(X^q, U^q)\rightarrow (\bar{X},\bar{U})$.\\
-%\bigskip
-%An upper bound of $n-<I,\bar{U}>$ is $rank(\bar{X})$. 
-%\bigskip
-
-By fixing $X=X^q$ we can get the following problem:
-\begin{equation*} 
-\begin{array}{ll}
-\displaystyle{
-{\operatornamewithlimits{\mbox{minimize}}_{U \, \in \, \mathbb{S}^n}}
-} &n\,-\,<I,\,U>\\ [0.15in]
-\mbox{subject to} %& X\,+\,z^q \in \tilde{\mathcal{C}}\cap \mathcal{S}^n_+\\[0.15in]
-&- <X^q,\,U>\,\leq\,r^q,\qquad y_1\\[0.15in]
-& <X^q,\,U>\,\leq\,r^q,\qquad y_2\\[0.15in]
-& I\,-\,U\,\succeq\,-h_1^q\, I,\qquad \Omega_1\\[0.15in]
-%& \lambda_{min}(X)\,\geq\, -h_1\\[0.15in]
-& U\,\succeq\, -h_2^q\, I,\qquad \Omega_2
-\end{array}
-\end{equation*}
-where $y_1, y_2, \Omega_1, \Omega_2$ are the Lagrangian multipliers for the corresponding constraints.
-\medskip
-
-$U^q$ is feasible to the above problem.
-
-\medskip
-Slater condion holds for the above problem. Can find a lower bound the objective by \tblue{Strong Duality}
-\end{frame}
-
-\begin{frame}
-\frametitle{Sketch of Proof}
-The dual problem is:
-\begin{equation*} 
-\begin{array}{ll}
-\displaystyle{
-{\operatornamewithlimits{\mbox{maximize}}_{y_1,y_2\in \mathbb{R},\,\Omega_1, \Omega_2 \, \in \, \mathbb{S}^n}}
-} &n+r^q\,y_1+r^q\,y_2-(1+h_1^q)trace(\Omega_1)-h_2^q\,trace(\Omega_2)\\ [0.15in]
-\mbox{subject to}% & X_n\,+\,p \in \tilde{\mathcal{C}}\\[0.15in]
-& -y_1\,X^q\,+\,y_2\,X^q\,-\,\Omega_1\,+\,\Omega_2\,=\,-I\\[0.15in]
-&y_1,\,y_2\,\leq\,0\\[0.15in]
-&\Omega_1,\,\Omega_2\,\succeq\,0
-\end{array}
-\end{equation*}
-%\end{frame}
-By diagonalizing $X^q$ we can get a tightened problem:
-\begin{equation*} \label{TXFixedPSDPerturbedDual}
-\begin{array}{ll}
-\displaystyle{
-{\operatornamewithlimits{\mbox{maximize}}_{y_1,y_2\in \mathbb{R},\,f,\,g \, \in \, \mathbb{R}^n}}
-} &n\,+\,r^q\,y_1\,+\,r^q\,y_2\,-\,(1\,+\,h_1^q)\,\sum_i f_i \,-\,h_2^q\,\sum_i g_i\\ [0.15in]
-\mbox{subject to}% & X_n\,+\,p \in \tilde{\mathcal{C}}\\[0.15in]
-& -y_1\,\lambda_i^q\,+\,y_2\,\lambda_i^q\,-\,f_i\,+\,g_i\,=\,-1,\,\forall i\,=\,1\cdots n\\[0.15in]
-&y_1,\,y_2\,\leq\,0\\[0.15in]
-&f_i,\,g_i\,\geq\,0,\,\forall i\,=\,1\cdots n
-\end{array}
-\end{equation*}
-%where $\lambda_i^q$ is the $i$th largest eigenvalue of $X^q$.
-\end{frame}
-%\begin{frame}
-%\frametitle{Constraint Qualification of SDCMPCC Formulation}
-%
-%\begin{quote}
-%This point is a \tblue{local minimizer} and a \tmag{strongly stationary point}
-%of the SDCMPCC formulation.
-%\end{quote}
-%When $f(x)\equiv 0$, all feasible x with corresponding assignment of $\xi$ are local minimizers.
-%
-%\end{frame}
-\begin{frame}
-\frametitle{Sketch of Proof}
-Since $X^q\rightarrow \bar{X}$, $\lambda_i^q\rightarrow\lambda_i$. Can get a lower bound for the objective of the dual problem, which is:
-\begin{displaymath}
-%\begin{array}
-\mbox{rank}(X)\,-\,\frac{2r^q}{\tilde{\lambda}}\,-\,(n-rank(X))(h_1^q+(1\,+\,h_1^q)\frac{2}{\tilde{\lambda}}\,||z^q||)-\,\frac{h_2^q}{\tilde{\lambda}}\,||\bar{X}||^*
-%\end{array}
-\end{displaymath}
-where $\tilde{\lambda}$ is the smallest positive eigenvalue of $\bar{X}$.
 \bigskip
-We can take 
-\begin{displaymath}
-M\,=\,\frac{2}{\tilde{\lambda}}\,+\,\frac{1}{\tilde{\lambda}}||\bar{X}||^*\,+\,(n-rank(X))(1+\frac{4}{\tilde{\lambda}})
-\end{displaymath}
+\tblue{Given a bad luck budget W,  want to find a schedule $(S, T)$ that yields the largest NPV in the worst case.}
+\end{frame}
+
+%\begin{frame}
+%\frametitle{General Framework}
+%\\
+%\bigskip
+%The decision maker can update the schedule when any bad luck happens. The process is called \tblue{Adaptive Scheduling}.\\
+%\bigskip
+%We use a '\tblue{Solve-Robustify}' approach to find a robust schedule under Adaptive Scheduling.
+%\end{frame}
+
+
+\begin{frame}
+\frametitle{Adaptive Scheduling}
+\tmag{The schedule will be updated once any bad luck happens.}
+% insert a figure
+The purpose is to reduce the loss. \\
+\bigskip
+Assumptions:
+\begin{itemize}
+%\item Only projects selected in the original schedule can be chosen in the updated schedule.
+%\medskip
+\item Bad Luck only happens to a project at its scheduled ending time.
+\medskip
+\item Only projects that are scheduled to start at and after the time of bad luck can be updated.
+\medskip
+\item When updating the schedule, we don't take future bad luck into account.
+\end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{KKT Condition of SDCMPCC Formulation}
-Given $\mathcal{C}\,=\,\{X\,|\,<A_i, X>\, \geq \, b_i, \, \forall i\,=\,1\cdots p\}$\\
-The KKT condition is:
-\begin{equation}\label{ExactKKTCondition}
+\frametitle{Adaptive Scheduling}
+Example:
+\begin{displaymath}
 \begin{array}{ll}
-0\,\preceq\,U&\,\perp\,-I\,+\,\mu\, X\,+Y\,\succeq 0 \\[0.15in]
-0\,\preceq\,X&\,\perp\,-\sum\lambda_i A_i\,+\,\mu\, U\,\succeq 0 \\[0.15in]
-0\,\preceq\,Y&\,\perp\,I- U\,\succeq 0\\[0.15in]
-0\,\,\leq\,\lambda_i&\,\perp\,b_i\,-\,<A_i, X_i>\,\geq\,0, \forall i\,=1\,\cdots,p
+&1\succ 2\succ 3~\mbox{and}~c_1=c_2=c_3=1\\
+&b_1=b_2=0, b_3=10, d_1=d_2=d_3=12
 \end{array}
-\end{equation}
-Where $\lambda, \mu$ and Y are lagrangian multipliers corresponding to the constraints $A(X)=b$, $<X,U>=0$ and $I-U\succeq 0$ respectively.\\
-\bigskip
-\tblue{Any feasible pair $(X, U)$ with U given by $P_0 P_0^T$ with columns of $P_0$ to be the eigenvectors in the null space of $X$ ,is a KKT stationary point of the SDCMPCC Formulation.}
-
-%\bigskip
-%
-%Under certain conditions, the solution to the relaxed formulation is a
-%solution to a reweighted version of the $L1$-norm minimization problem.
-
+\end{displaymath}
+The deadline is Month 36
+\begin{figure}
+\includegraphics[scale=0.35, width=11cm, height=2.5cm]{Adapt1.png}
+\caption{Initial Schedule}
+\end{figure}
 \end{frame}
 
 
 
+\begin{frame}
+\frametitle{Adaptive Scheduling}
+\begin{figure}
+\includegraphics[scale=0.35, width=11cm, height=1.5cm]{Adapt2.png}
+\caption{Schedule affected by bad luck}
+\end{figure}
+Project 3 cannot be completed by the deadline.
+\begin{figure}
+\includegraphics[scale=0.35, width=11cm, height=1.5cm]{Adapt3.png}
+\caption{Updated Schedule after Delay}
+\end{figure}
+Delete Project 3 in the updated schedule.
+\end{frame}
+
+\begin{frame}
+\frametitle{Adaptive Scheduling}
+\bigskip
+Given an initial schedule $\tblue{(S, T)}$ and a triple of bad luck $\tblue{(I_f, I_{\delta}, I_{f|\delta})}$, can get a final realization $\tblue{(S', T')}$ by solving a series of optimization problems.
+\end{frame}
+
+\begin{frame}
+\frametitle{Estimation of Worst Case Scenario}
+ Given the budget W, want to find a triple of bad luck $\tblue{(I_f, I_{\delta}, I_{f|\delta})}$ that maximizes the loss.\\
+\bigskip
+Cannot incorporate adaptive scheduling into a single optimization problem.\\
+\bigskip
+\tblue{Brute-force approach}: Try every combination of $(I_f, I_{\delta}, I_{f|\delta})$ and pick the one that yields the maximum loss. Computationally infeasible.
+\end{frame}
+
+\begin{frame}
+\frametitle{General Framework}
+\begin{algorithm}[H]
+         \KwData{Initial Schedule $(S,T)$, budget of bad luck W}
+\medskip
+%	\KwResult{Robust Schedule $(S', T')$}.
+\medskip
+	\While{Stopping Criteria not satisfied}{
+\medskip
+		Find $(I_f, I_{\delta}, I_{f|\delta})$ in the worst case scenario under \tblue{Adaptive Scheduling}\;
+\medskip
+                  Robustify $(S, T)$ based upon $(I_f, I_{\delta}, I_{f|\delta})$ \;
+	}       
+\medskip
+Output $(S,T)$
+\end{algorithm} 
+
+The initial schedule can be the solution in the simple case.
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\frametitle{Estimation of Worst Case Scenario}
+%\bigskip
+\item Our approach: \tblue{Greedy Heuristics}.
+\bigskip
+\item Pros: Computationally efficient. Can get a bad scenario and identify critical projects in a reasonable amount of time.
+\bigskip
+\item Cons: No proof for the optimality of $\tblue{(I_f, I_{\delta}, I_{f|\delta})}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Estimation of Worst Case Scenario}
+
+\begin{algorithm}[H]
+         \KwData{Initial Schedule (S,T), budget of bad luck W,$(I_f, I_{\delta}, I_{f|\delta})=\emptyset$}
+	\KwResult{Triple of bad luck in the worst case $(I_f, I_{\delta}, I_{f|\delta})$}
+	\While{1}{
+		\For{i in S, p in $\{Failure, delay, both\}$ with $W_{ip}\leq W$}{
+                       
+                       
+		}
+%		\eIf{There exist some project i with type bad luck that incurs positive loss}{
+%			pick the one that with the largest loss\;
+%			W=W-$W_{ip}$\; 
+%		}{
+%		Jump out of the loop\;
+	}       
+
+\end{algorithm} 
+\end{frame}
 
 
+\begin{frame}
+\frametitle{Robustification of Schedule}
+After getting the triple $(I_f, I_{\delta}, I_{f|\delta})$ in the worst case scenario, can take the following measures to robustify the schedule:
+\bigskip
+\begin{itemize}
+\item If Project i fails in the worst case scenario:
+\medskip
+	\begin{itemize}
+		\item i is  in set I with $I\vdash j$. Add another project $k\in I$ to the schedule. 
+\medskip
+		\item Delete Project i. 
+\medskip
+	\end{itemize}
+	\item If Project i is delayed in the worst case scenario:
+\medskip
+	\begin{itemize}
+		\item Move the starting time of i forward if possible.
+\medskip
+		\item Delete Project i. 
+	\end{itemize}
+\end{itemize}
+\end{frame}
 
+\section{Computational Experiment}
+\begin{frame}
+\frametitle{Small-size Example}
+The small-size Example contains 13 projects. We test variuous choices of bad luck budget W and hurdle rate $\gamma$.
+\begin{figure}[htbp]
+\sbox0{\includegraphics[width=4.5cm,height=2cm]{W14Gamma099.png}}
+\setlength\alignwidth{\wd0}
+\setlength\alignheight{\ht0}
+\sbox2{\includegraphics[width=4.5cm,height=2cm]{W14Gamma0992.png}}
+\ifdim\wd2>\alignwidth \setlength\alignwidth{\wd2}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht2}\fi
+\sbox4{\includegraphics[width=4.5cm,height=2cm]{W14Gamma0993.png}}
+\ifdim\ht4>\alignwidth \setlength\alignwidth{\wd4}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht4}\fi
+\sbox6{\includegraphics[width=4.5cm,height=2cm]{W14Gamma0994.png}}
+\ifdim\ht6>\alignwidth \setlength\alignwidth{\wd6}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht6}\fi
 
-%\begin{frame}
-%\frametitle{Comparison with Weighted $L1$ Optimization Problem}
-%Definition: A point y is called \tmag{nondominated} if there does not exist $\tilde{y}$ such that $|\,\tilde{y}\,|\,\leq\, |\,y\,|,\tilde{y}\,\neq\, \,y$
-%
-%\bigskip
-%Nondominated points in the feasible region can be obtained by Weighted $L1$ Minimization with strict positive weights.
-%
-%\bigskip
-%The limit point $x^*$ of local optimums to $NLP(\epsilon)$ must be nondominated.
-%\end{frame}
-%
-%\begin{frame}
-%%Give ExpLP as an example
-%%\frametitle{$x=()$ is not a local optimum to NLP }
-%\tmag{Not all} nondominated points are the limit point of local optima of $NLP(\epsilon)$  as $\epsilon\rightarrow 0$. 
-%Consider the following problem:\\
-%%\begin{minipage}{2.1in}
-%%\includegraphics[scale=0.25]{ExpLP.jpg}
-%%\end{minipage}
-%\begin{minipage}{0.1in}
-%\
-%\end{minipage}
-%\begin{minipage}{2.1in}
-%\begin{equation*}\label{ExampleL0}
-%\begin{array}{ll}
-%\displaystyle{
-%{\operatornamewithlimits{\mbox{minimize}}_{x \, \in \, \mathbb{R}^2}}
-%} & \| \, x \, \|_0 \\ [0.15in]
-%\mbox{subject to} & 10\, x_1\,+\,x_2 \, \geq \,21 \\
-%&x_1\,+\,2\,x_2\,\geq\,4\\
-%&x \, \geq \, 0
-%\end{array}
-%\end{equation*}
-%\end{minipage}
-%\bigskip\\
-%(2,1) is a solution to weighted $L1$ minimization problem for certain choice of weight.
-%
-%\bigskip
-%However, it can not be the x part of a limit point of local optima of $NLP(\epsilon)$ as $\epsilon\rightarrow 0$. 
-%\end{frame}
-%
-%%\begin{frame}
-%%\frametitle{Relationship with a Piecewise Problem}
-%%Want to solve a generalized version of $L0$ optimization problem:
-%%\begin{displaymath}
-%%\tblue{\min_x \{f(x) \, + \, \beta || x ||_0 \, : \, c_{\mathcal{E}}(x) \, = \, 0, c_{\mathcal{I}}(x) \, \leq \, 0, \, x \in \re^n\}}
-%%\end{displaymath}
-%%\bigskip
-%%
-%%For any feasible point $\bar{x}$, consider a piecewise problem
-%%\begin{equation*}
-%%\tblue{\min_x \{f(x) : \, c_{\mathcal{E}}(x) \, = \, 0, c_{\mathcal{I}}(x) \, \leq \, 0, \, x_i=0\, \textrm{ if } \bar{x}_i=0,\,x\in \re^n\}}
-%%\end{equation*}
-%%\bigskip
-%%
-%%Under LICQ, if $\bar{x}$ is the limit point of local optimums to $NLP(\epsilon)$ as $\epsilon\rightarrow 0$, then  Second Order Necessary Condition is satisfied at $\bar{x}$ in the piecewise problem.
-%%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Completely positive formulation}
-%The cone of completely positive matrices is defined as:
-%\begin{equation*}
-%\mathcal{C}_n\,=\,\{\sum_{i=1}^k x_i x_i^T: x_i\in \mathcal{R}_+^n\mbox{ for } i\,=\,1\cdots k\}
-%\end{equation*}
-%
-%\bigskip
-%< , > denotes the Frobenius product of two matrices
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Completely positive formulation(Continue)}
-%Consider the problem with $L0$ objective, and the feasible region is the intersection of a linear subspace and nonnegative orthant.
-%\begin{displaymath}
-%\begin{array}{lll}
-%\min_{x,\xi} & \sum_{i=1}^n (1 - \xi_i)  \\  [5pt]
-%\mbox{subject to} &  Ax \, = \, b, \\ [5pt]
-%%& 0 \, \leq \, x^+, x^- \\ [5pt]
-%& 0 \, \leq \,\xi \, \leq \, \mathbf{1}\\ [5pt] 
-%& 0\, \leq\,x \\[5pt]
-%%&\xi\, \leq \, \mathbf{1}\\ [5pt]
-%& \sum_{i=1}^n\xi_i \,x_i\,\leq\,0 \\ [5pt]
-%%&\xi_i \, x_i \,\leq\,\epsilon,\qquad \mu^-_i & i=1,\ldots,n % \\ [5pt]
-%%& \tblue{0 \, \leq \, x^+_i \, \perp \, x^-_i \, \geq \, 0} &  i=1,\ldots,n
-%\end{array}
-%\end{displaymath}
-%Add an auxillary variable $s\geq 0$ and replace the contraint $\xi\leq\mathbf{1}$ by $\xi + s = \mathbf{1}$
-%\end{frame}
-%
-%
-%\begin{frame}
-%\frametitle{Completely positive formulation(Continue)}
-%Have the completely positive formulation:
-%\begin{equation*} \label{eq:COP}
-%\begin{array}{ll}
-%\displaystyle{
-%{\operatornamewithlimits{\mbox{minimize}}_{x, \, \xi}}
-%} & \onebld_n^T ( \, \onebld_n - \xi \, ) \, = \, \displaystyle{
-%\sum_{i=1}^n
-%} \, ( \, 1 - \xi_i \, ) \\ [0.15in]
-%\mbox{subject to}&\left[\begin{array}{clcr}
-%1&x^T&\xi^T&s^T\\
-%x&Y_1&Y_4^T&Y_6^T\\
-%\xi&Y_4&Y_2&Y_5^T\\
-%s&Y_6&Y_5&Y_3\end{array}\right]\, \in\, \mathcal{C}_{3n+1}\\
-% \mbox{and}& a_i^T x\, = \, b_i,\qquad\forall i\in 1\cdots m,\\ [7pt]
-%&<a_i a_i^T\,,\,Y_1>\,=\,b_i^2,\qquad\forall i\in 1\cdots m,\\[7pt]
-%%& 0 \, \leq \, \xi \\ [7pt]
-%%&0\,\leq\, x\\[7pt]
-%& <\mathcal{I}_n,\,Y_4>\,\leq\,0\\ [7pt]
-%&\xi_i\,+\,s_i\,=\,1,\qquad\forall i=1\cdots n,\\[7pt]
-%& <diag(e_i)\,,\,Y_2+Y_3+2*Y_5>\,=\,1, \forall i=1\cdots n
-%\end{array}
-%\end{equation*}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Completely positive formulation}
-%The completely positive formulation has the same objective value with the complementarity formulation. The proof does not require the boundedness of x.\\
-%\bigskip
-%All the constraints are convex.\\
-%\bigskip
-%It is NP-hard to verify whether a matrix is completely positive or not
-%\end{frame}
-%
-%
-%
-%
-%
-%
-%%\begin{frame}
-%%\frametitle{Penalty method}
-%%Can \tblue{penalize violations of complementarity} in many ways:  \\ [5pt]
-%%
-%%$\bullet$ Add $(x^++x^-)^T\xi$ to the objective function. \\ [5pt]
-%%
-%%$\bullet$ Add $(x^++x^-)^T\xi \, + \, (x^+)^Tx^-$  to the objective function.  \\ [2pt]
-%%\quad Corresponds to the AMPL keyword ``complements'' \\ \quad when using knitro.  \\ [5pt]
-%%
-%%{$\bullet$ Add $\tred{(}((x^++x^-)^T\xi\tred{)^2}$ to the objective function.}  \\ [5pt]
-%%
-%%\only<1>{$\bullet$ Add $\tred{(}(x^++x^-)^T\xi \, + \, (x^+)^Tx^-)\tred{)^2}$  to the objective function.}
-%%\only<2>{\tblue{$\bullet$ Add $\tred{(}(x^++x^-)^T\xi \, + \, (x^+)^Tx^-)\tred{)^2}$  to the objective function.}} \\ [5pt]
-%%
-%%$\bullet$ Use the Fischer-Burmeister function, or some other NCP function.
-%%
-%%\bigskip
-%%
-%%Theoretical investigation is ongoing.
-%%
-%%\bigskip
-%%
-%%\pause
-%%
-%%Surprisingly, the \tblue{fourth formulation} has worked well in our tests.
-%%
-%%
-%%\end{frame}
-%%
-%
-%\subsection*{Computational Results}
-%
-%\begin{frame}
-%\frametitle{Test problems}
-%Examine three classes of problems:  
-%
-%\bigskip
-%
-%$\bullet$ Minimize L0-norm, without another objective~$f(x)$.
-%
-%\medskip
-%
-%$\bullet$ Look at weighted combinations of $f(x)$ and L0-norm.
-%
-%\medskip
-%
-%$\bullet$ Look at signal recovery problems.
-%
-%\bigskip
-%
-%In each case, compare solutions obtained by a nonlinear programming
-%package (KNITRO, SNOPT, CONOPT, MINOS) for our complementarity formulation
-%with an L1-norm formulation.
-%
-%\bigskip
-%
-%Have no guarantee of global optimality.
-%
-%\end{frame}
-%
-%\subsection*{Minimize L0-norm}
-%
-%\begin{frame}
-%\frametitle{Minimize number of non zeroes}
-%
-%
-%\begin{displaymath}
-%\begin{array}{ll}
-%  \min_{x\in\real^n} \quad&  \|x\|_{0,1} \\
-%  \text{s.t.} \quad& A x \geq b.
-%\end{array}
-%\end{displaymath}
-%
-%Look at four formulations:
-%
-%\bigskip
-%
-%\begin{tabular}{ll}
-%\tblue{MILP:} & integer programming formulation with a big-$M$ \\  [5pt]
-%\tblue{L1:} & $L1$-approximation solved as an LP.  \\  [2pt]
-%&  Objective reweighted iteratively (Candes et al). \\  [5pt]
-%\tblue{fullcomp:} & complementarity formulation solved as NLP  \\  [5pt]
-%\tblue{halfcomp:} & modified complementarity formulation, solved as NLP
-%\end{tabular}
-%
-%\bigskip
-%
-%
-%\tgreen{Test problems}
-%
-%$A$ and $b$ generated randomly, each entry in $U[-1,1]$.
-%\end{frame}
-%
-%%\begin{frame}
-%%\frametitle{$A$ is $30 \times 50$: \\ 50 test problems, various solvers and start points}
-%%\includegraphics[scale=0.5]{Test1_Small_LP_Reweight.jpeg}
-%%\end{frame}
-%
-%%\begin{frame}
-%%\frametitle{$A$ is $300 \times 500$: 50 test problems}
-%%\includegraphics[scale=0.5]{Test1_Large_LP_Reweight.jpeg}
-%%\end{frame}
-%
-%%\begin{frame}
-%%\frametitle{$A$ is $300 \times 500$: performance profile of sparsity}
-%%\includegraphics[scale=0.5]{Test1_PerformanceProfile.jpeg}
-%%\end{frame}
-%
-%
-%%\begin{frame}
-%%\frametitle{Comments on preliminary results}
-%%
-%%The complementarity formulations generally give \tblue{sparser solutions}
-%%than the $L1$ LP formulation.
-%%
-%%\medskip
-%%
-%% Best of  ten runs with Knitro is \tmag{always better} than  $L1$ solution:  \\  [5pt]
-%% \qquad on average, only 26\% worse than MILP solution.  \\ %[3pt]
-%% \qquad in contrast, $L1$ solution is 3 times worse than MILP solution.
-%%
-%%\medskip
-%%
-%%Occasionally, a complementarity formulation gives a bad solution.
-%%This is less true with the last two starting point choices.
-%%Both these choices exploit a \tblue{warm start} based on the $L1$ LP solution.
-%%
-%%\medskip
-%%
-%%The \tblue{half-complementarity} formulation gives fewer poor solutions than the
-%%full-complementarity formulation.
-%%
-%%%\medskip
-%%%
-%%%We are trying to understand why Knitro is so effective.
-%%
-%%\end{frame}
-%
-%\subsection*{Pareto frontier}
-%
-%\begin{frame}
-%\frametitle{Weighted combinations}
-%
-%\begin{displaymath}
-%\begin{array}{ll}
-%  \min_{x\in\real^n} \quad&  q(x) + \beta\|x\|_{0,1} \\
-%  \text{s.t.} \quad& A x \geq b.
-%\end{array}
-%\end{displaymath}
-%
-%\bigskip
-%
-%Solve for each norm for various different choices of~$\beta$.
-%
-%\bigskip
-%
-%In our tests, $A$ is $30 \times 50$, $q(x)$ is  strictly convex
-%quadratic function.
-%
-%\medskip
-%
-%The L0-norm formulations are solved using KNITRO under AMPL.
-%
-%\end{frame}
-%
-%%\begin{frame}
-%%\frametitle{Pareto frontier}
-%%\includegraphics[scale=0.5]{Test2_Small_Pareto.jpeg}
-%%\end{frame}
-%
-%\subsection*{Signal recovery}
-%
-%\begin{frame}
-%\frametitle{Signal recovery}
-%
-%\begin{displaymath}
-%  \min_{x\in\real^n} \quad  \|Ax-b\|_2^2 + \beta\|x\|_{0,1}
-%\end{displaymath}
-%
-%\bigskip
-%
-%Look at different choices of regularizing parameter $\beta$.
-%
-%\medskip
-%
-%$A$ is $256 \times 1024$. \\
-%In original signal, 40 entries of $x$ are nonzero. \\
-%Random noise is added to give~$b$.
-%
-%\bigskip
-%
-%L1-norm results are improved by \tblue{debiasing}:  \\
-%fix zeroes in L1 solution at zero, then look for best least squares fit.  \\
-%L1-debiased leads to many small nonzero components in our tests.
-%
-%\end{frame}
+\centering
+  \subfloat[Initial Schedule]{\fakeheight{\alignwidth}{\alignheight}{\usebox0}}\hspace{1em}%
+  \subfloat[Intial Worst Case]{\fakeheight{\alignwidth}{\alignheight}{\usebox2}}\\[2ex]
+  \subfloat[Robust Schedule]{\fakeheight{\alignwidth}{\alignheight}{\usebox4}}\hspace{1em}%
+  \subfloat[Robust Worst Case]{\fakeheight{\alignwidth}{\alignheight}{\usebox6}}
+\caption{$W=1.4$, $\gamma=0.99$}
+%\label{FigData1hp990w1p400}
+\end{figure}
+\end{frame}
 
-%\begin{frame}
-%\frametitle{Signal recovery mean square error}
-%\includegraphics[scale=0.7]{Test3_CPLEXMSE.pdf}
-%\end{frame}
+\begin{frame}
+\frametitle{Small-size Example}
+\begin{figure}[htbp]
+\sbox0{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0991.png}}
+\setlength\alignwidth{\wd0}
+\setlength\alignheight{\ht0}
+\sbox2{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0992.png}}
+\ifdim\wd2>\alignwidth \setlength\alignwidth{\wd2}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht2}\fi
+\sbox4{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0993.png}}
+\ifdim\ht4>\alignwidth \setlength\alignwidth{\wd4}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht4}\fi
+\sbox6{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0994.png}}
+\ifdim\ht6>\alignwidth \setlength\alignwidth{\wd6}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht6}\fi
 
-%\begin{frame}
-%\frametitle{Signal recovery sparsity}
-%\includegraphics[scale=0.7]{Test3_CPLEXSparsity.pdf}
-%\end{frame}
-\section{Robust Scheduling with Bad Luck}
+\centering
+  \subfloat[Initial Schedule]{\fakeheight{\alignwidth}{\alignheight}{\usebox0}}\hspace{1em}%
+  \subfloat[Intial Worst Case]{\fakeheight{\alignwidth}{\alignheight}{\usebox2}}\\[2ex]
+  \subfloat[Robust Schedule]{\fakeheight{\alignwidth}{\alignheight}{\usebox4}}\hspace{1em}%
+  \subfloat[Robust Worst Case]{\fakeheight{\alignwidth}{\alignheight}{\usebox6}}
+\caption{$W=2.5$, $\gamma=0.99$}
+\label{FigData1hp990w2p500}
+\end{figure}
+\end{frame}
 
+\begin{frame}
+\frametitle{Small-size Example}
+\begin{figure}[htbp]
+\sbox0{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0951.png}}
+\setlength\alignwidth{\wd0}
+\setlength\alignheight{\ht0}
+\sbox2{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0952.png}}
+\ifdim\wd2>\alignwidth \setlength\alignwidth{\wd2}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht2}\fi
+\sbox4{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0953.png}}
+\ifdim\ht4>\alignwidth \setlength\alignwidth{\wd4}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht4}\fi
+\sbox6{\includegraphics[width=4.5cm,height=2cm]{W25Gamma0954.png}}
+\ifdim\ht6>\alignwidth \setlength\alignwidth{\wd6}\fi
+\ifdim\ht2>\alignheight \setlength\alignheight{\ht6}\fi
 
-\section{Conclusions}
+\centering
+  \subfloat[Initial Schedule]{\fakeheight{\alignwidth}{\alignheight}{\usebox0}}\hspace{1em}%
+  \subfloat[Initial Worst Case]{\fakeheight{\alignwidth}{\alignheight}{\usebox2}}\\[2ex]
+  \subfloat[Robust Schedule]{\fakeheight{\alignwidth}{\alignheight}{\usebox4}}\hspace{1em}%
+  \subfloat[Robust Worst Case]{\fakeheight{\alignwidth}{\alignheight}{\usebox6}}
+\caption{$W=2.5$, $\gamma=0.95$}
+%\label{FigData1hp950w2p500}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Large-size Example}
+\begin{center}
+\includegraphics[scale=0.45] {last.png} 
+%\caption{NPV Value VS Bad Luck Budget W}
+\end{center}
+\end{frame}
+		
+		\begin{frame}
+			\frametitle{Graphical User Interface}
+			\begin{center}
+				\includegraphics[trim=112mm 40mm 7mm 26mm,clip,scale=0.35]{../MOPTA2015Report/Data1hp990w1p400.png}
+			\end{center}
+		\end{frame}
+
+	\section{Conclusions}
 
 
 
